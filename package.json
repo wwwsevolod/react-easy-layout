@@ -1,0 +1,19 @@
+{
+  "name": "react-easy-layout",
+  "version": "0.5.0",
+  "description": "Advanced react layout library that easy to use",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wwwsevolod/react-easy-layout.git"
+  },
+  "author": "wwwsevolod",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wwwsevolod/react-easy-layout/issues"
+  },
+  "homepage": "https://github.com/wwwsevolod/react-easy-layout#readme"
+}
