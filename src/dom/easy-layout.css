@@ -28,27 +28,27 @@
 
 
 .easy-layout-Block_align_Auto {
-    align-items: auto;
+    align-self: auto;
 }
 
 .easy-layout-Block_align_Center {
-    align-items: center;
+    align-self: center;
 }
 
 .easy-layout-Block_align_End {
-    align-items: flex-end;
+    align-self: flex-end;
 }
 
 .easy-layout-Block_align_Start {
-    align-items: flex-start;
+    align-self: flex-start;
 }
 
 .easy-layout-Block_align_Stretch {
-    align-items: stretch;
+    align-self: stretch;
 }
 
 .easy-layout-Block_align_Baseline {
-    align-items: baseline;
+    align-self: baseline;
 }
 
 

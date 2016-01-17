@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import block from 'bem-cn';
 
 import {
     selfAlignPropType
@@ -13,8 +14,9 @@ import {
     STRETCH
 } from '../constants';
 
+const bem = block('Block');
 
-export class Block extends Component {
+export default class Block extends Component {
     static AUTO = AUTO;
     static TO_START = TO_START;
     static TO_END = TO_END;
@@ -46,8 +48,9 @@ export class Block extends Component {
             MsFlexPreferredSize: this.props.size
         };
 
-        return <div style={styles} className={this.bem({
+        return <div style={styles} className={bem({
             static: this.props.static,
+            align: this.props.align,
             grow: this.props.grow && !this.props.static,
             noGrow: !this.props.grow || this.props.static,
             shrink: this.props.shrink && !this.props.static,

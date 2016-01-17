@@ -1,0 +1,18 @@
+.App {
+
+}
+
+.RowExample {
+    height: 150px;
+}
+
+.RowExample__Left {
+    background: red;
+    width: 100px;
+    height: 100%;
+}
+
+.RowExample__Right {
+    background: blue;
+    height: 100%;
+}
