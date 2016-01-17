@@ -1,0 +1,79 @@
+{
+    "env": {
+        "node": true,
+        "browser": true,
+        "es6": true
+    },
+
+    "ecmaFeatures": {
+        "jsx": true,
+        "classes": true,
+        "modules": true
+    },
+
+    "parser": "babel-eslint",
+
+    "rules": {
+        "quotes": [2, "single", "avoid-escape"],
+        "strict": [2, "never"],
+        "new-cap": 0,
+        "no-loop-func": 0,
+        "no-underscore-dangle": 0,
+        "comma-dangle": [2, "never"],
+        "no-void": 2,
+        "no-fallthrough": 2,
+        "radix": 2,
+        "max-len": [2, 120],
+        "no-new-wrappers": 2,
+        "no-labels": 2,
+        "curly": 2,
+        "key-spacing": 2,
+        "eqeqeq": 2,
+        "brace-style": [2, "1tbs", { "allowSingleLine": false }],
+        "camelcase": 2,
+        "semi": [2, "always"],
+        "no-console": 0,
+        "no-shadow": 0,
+        "no-undef": 2,
+        "no-var": 2,
+        "react/jsx-uses-vars": 2,
+        "react/jsx-no-undef": 2,
+        "react/jsx-uses-react": 2,
+        "jsx-quotes": [2, "prefer-double"],
+        "react/no-multi-comp": 0,
+        "react/no-unknown-property": 2,
+        "react/react-in-jsx-scope": 0,
+        "react/forbid-prop-types": [2, {
+            "forbid": ["object", "array", "any"]
+        }],
+        "react/jsx-boolean-value": [2, "always"],
+        "react/jsx-closing-bracket-location": 0,
+        "react/jsx-curly-spacing": [2, "never", {"allowMultiline": true}],
+        "react/jsx-indent-props": [2, 4],
+        "react/jsx-no-bind": 0,
+        "react/jsx-no-duplicate-props": [2, { "ignoreCase": true }],
+        "react/jsx-no-literals": 0,
+        "react/jsx-sort-prop-types": 0,
+        "react/jsx-sort-prop": 0,
+        "react/no-danger": 0,
+        "react/no-did-mount-set-state": 0,
+        "react/no-did-update-set-state": 0,
+        "react/no-direct-mutation-state": 2,
+        "react/no-set-state": 0,
+        "react/prefer-es6-class": 2,
+        "react/prop-types": [2, {
+            "ignore": ["children", "className"]
+        }],
+        "react/wrap-multilines": 0,
+        "react/self-closing-comp": 0,
+        "react/sort-comp": 0
+    },
+
+    "plugins": [
+        "react"
+    ],
+
+    "globals": {
+        "require": true,
+    }
+}

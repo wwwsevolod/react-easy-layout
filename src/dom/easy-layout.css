@@ -1,0 +1,227 @@
+.easy-layout-Box {
+    display: flex;
+    box-sizing: border-box;
+}
+
+
+
+.easy-layout-Box_align_Center {
+    align-items: center;
+}
+
+.easy-layout-Box_align_End {
+    align-items: flex-end;
+}
+
+.easy-layout-Box_align_Start {
+    align-items: flex-start;
+}
+
+.easy-layout-Box_align_Stretch {
+    align-items: stretch;
+}
+
+.easy-layout-Box_align_Baseline {
+    align-items: baseline;
+}
+
+
+
+.easy-layout-Block_align_Auto {
+    align-items: auto;
+}
+
+.easy-layout-Block_align_Center {
+    align-items: center;
+}
+
+.easy-layout-Block_align_End {
+    align-items: flex-end;
+}
+
+.easy-layout-Block_align_Start {
+    align-items: flex-start;
+}
+
+.easy-layout-Block_align_Stretch {
+    align-items: stretch;
+}
+
+.easy-layout-Block_align_Baseline {
+    align-items: baseline;
+}
+
+
+
+.easy-layout-Box_content_Start {
+    align-content: flex-start;
+}
+
+.easy-layout-Box_content_End {
+    align-content: flex-end;
+}
+
+.easy-layout-Box_content_Center {
+    align-content: center;
+}
+
+.easy-layout-Box_content_SpaceBetween {
+    align-content: space-between;
+}
+
+.easy-layout-Box_content_SpaceAround {
+    align-content: space-around;
+}
+
+.easy-layout-Box_content_Stretch {
+    align-content: stretch;
+}
+
+.easy-layout-Box_content_Baseline {
+    align-content: baseline;
+}
+
+
+
+
+.easy-layout-Box_justify_Start {
+    justify-content: flex-start;
+}
+
+.easy-layout-Box_justify_End {
+    justify-content: flex-end;
+}
+
+.easy-layout-Box_justify_Center {
+    justify-content: center;
+}
+
+.easy-layout-Box_justify_SpaceBetween {
+    justify-content: space-between;
+}
+
+.easy-layout-Box_justify_SpaceAround {
+    justify-content: space-around;
+}
+
+
+
+
+
+.easy-layout-Box_wrap_Nowrap {
+    flex-wrap: nowrap;
+}
+
+.easy-layout-Box_wrap_Wrap {
+    flex-wrap: wrap;
+}
+
+.easy-layout-Box_wrap_Reverse {
+    flex-wrap: wrap-reverse;
+}
+
+
+
+
+.easy-layout-Box_type_Row {
+    flex-direction: row;
+}
+
+.easy-layout-Box_type_RowReverse {
+    flex-direction: row-reverse;
+}
+
+.easy-layout-Box_type_Column {
+    flex-direction: column;
+}
+
+.easy-layout-Box_type_ColumnReverse {
+    flex-direction: column-reverse;
+}
+
+
+
+
+.easy-layout-Block {
+    box-sizing: border-box;
+}
+
+.easy-layout-Block_grow {
+    flex-grow: 1;
+}
+
+.easy-layout-Block_shrink {
+    flex-shrink: 1;
+}
+
+.easy-layout-Block_no_Shrink {
+    flex-shrink: 0;
+}
+
+.easy-layout-Block_no_Grow {
+    flex-grow: 0;
+}
+
+.easy-layout-Block_static {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+
+
+.easy-layout-Box > .easy-layout-Block {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.easy-layout-Box > .easy-layout-Block > .easy-layout-Box {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.easy-layout-Box > .easy-layout-Block > .easy-layout-Box > .easy-layout-Block {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+
+
+.easy-layout-Box_fix.easy-layout-Box_type_Row, .easy-layout-Box_fix.easy-layout-Box_type_RowReverse {
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_Row > .easy-layout-Block, .easy-layout-Box_fix.easy-layout-Box_type_RowReverse > .easy-layout-Block {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.easy-layout-Box_fix.easy-layout-Box_type_Column, .easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse {
+
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block, .easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block:first-of-type {
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block:first-of-type {
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block:first-of-type {
+    padding-bottom: 0px;
+    padding-top: 10px;
+}
+
+.easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block:first-of-type {
+    padding-bottom: 10px;
+    padding-top: 0px;
+}

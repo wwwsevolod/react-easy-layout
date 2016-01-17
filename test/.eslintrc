@@ -1,0 +1,14 @@
+{
+    "extends": "../.eslintrc",
+    "globals": {
+        "TestUtils": true,
+        "describe": true,
+        "context": true,
+        "it": true,
+        "before": true,
+        "after": true,
+        "beforeEach": true,
+        "afterEach": true,
+        "expect": true
+    }
+}
