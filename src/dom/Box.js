@@ -27,7 +27,6 @@ import {
 const bem = block('Box');
 
 
-
 export default class Box extends Component {
     render() {
         return <div className={bem({
