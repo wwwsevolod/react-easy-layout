@@ -1,0 +1,6 @@
+src
+test
+examples
+coverage
+.git
+node_modules
