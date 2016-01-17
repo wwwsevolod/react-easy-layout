@@ -1,5 +1,4 @@
 import {Column, Box} from 'dom';
-import block from 'bem-cn';
 
 describe('Column', () => {
     it(`should render className that contains Column's css class`, () => {

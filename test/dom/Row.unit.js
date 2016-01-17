@@ -1,5 +1,4 @@
 import {Row, Box} from 'dom';
-import block from 'bem-cn';
 
 describe('Row', () => {
     it(`should render className that contains Row's css class`, () => {
