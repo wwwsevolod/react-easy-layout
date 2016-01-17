@@ -5,8 +5,6 @@ import 'normalize.css';
 import '../src/dom/easy-layout.css';
 import './index.css';
 
-console.log(Column, Block, Row);
-
 render(
     <div className="App">
         <div className="RowExample">
