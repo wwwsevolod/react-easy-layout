@@ -12,3 +12,9 @@ chai.use(jsxChai);
 global.TestUtils = TestUtils;
 global.React = React;
 global.expect = chai.expect;
+global.renderElement = (...args) => {
+    const renderer = TestUtils.createRenderer();
+    renderer.render(...args);
+
+    return renderer.getRenderOutput();
+};

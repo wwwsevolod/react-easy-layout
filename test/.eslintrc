@@ -1,6 +1,7 @@
 {
     "extends": "../.eslintrc",
     "globals": {
+        "renderElement": true,
         "TestUtils": true,
         "describe": true,
         "context": true,
