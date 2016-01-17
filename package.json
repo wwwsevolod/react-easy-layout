@@ -8,7 +8,6 @@
     "test": "NODE_PATH=./src NODE_ENV=test $(npm bin)/_mocha --compilers js:babel-register --require ./testHelper.js --recursive test/**/*.unit.js",
     "test:cov": "NODE_PATH=./src NODE_ENV=test $(npm bin)/babel-node ./node_modules/isparta/bin/isparta cover --include-all-sources --report text node_modules/mocha/bin/_mocha -- --require ./testHelper.js --recursive test/**/*.unit.js",
     "test:watch": "npm run test -- --watch",
-    "prepublish": "npm run test && npm run build:prod",
     "lint": "$(npm bin)/eslint ./",
     "compile:js": "$(npm bin)/babel src --out-dir lib",
     "compile:css": "./node_modules/.bin/postcss --use autoprefixer --autoprefixer.browsers \"last 2 versions, ie >= 10\" ./src/dom/easy-layout.css -d lib/dom/",
