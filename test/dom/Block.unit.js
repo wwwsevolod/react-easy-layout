@@ -63,6 +63,16 @@ describe('Block', () => {
         expect(element.props.style.height).to.equal('2000px');
     });
 
+    it('should not set basis when no size is provided', () => {
+        const element = renderElement(<Block></Block>);
+        expect(element.props.style.flexBasis).to.be.undefined;
+    });
+
+    it('should set basis when size is provided', () => {
+        const element = renderElement(<Block size="auto"></Block>);
+        expect(element.props.style.flexBasis).to.equals('auto');
+    });
+
     it('should set width and height in unit that was set', () => {
         const element = renderElement(<Block width="100vh" height="2000%"></Block>);
         expect(element.props.style.width).to.equal('100vh');

@@ -26,7 +26,7 @@ export default class Block extends Component {
 
 
     static defaultProps = {
-        size: 'auto',
+        size: '',
         align: AUTO,
         grow: true,
         shrink: true,
@@ -57,12 +57,15 @@ export default class Block extends Component {
         }
 
         const styles = {
-            flexBasis: this.props.size,
-            WebkitFlexBasis: this.props.size,
-            MsFlexPreferredSize: this.props.size,
             width: width,
             height: height
         };
+
+        if (this.props.size) {
+            styles.flexBasis = this.props.size;
+            styles.WebkitFlexBasis = this.props.size;
+            styles.MsFlexPreferredSize = this.props.size;
+        }
 
 
         return <div style={styles} className={bem({
