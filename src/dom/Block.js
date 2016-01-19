@@ -47,19 +47,24 @@ export default class Block extends Component {
 
     render() {
         let width = this.props.width;
-        if (parseInt(width, 10).toString() === width) {
+        if (width && parseInt(width, 10).toString() === width) {
             width = `${width}px`;
         }
 
         let height = this.props.height;
-        if (parseInt(height, 10).toString() === height) {
+        if (height && parseInt(height, 10).toString() === height) {
             height = `${height}px`;
         }
 
-        const styles = {
-            width: width,
-            height: height
-        };
+        const styles = {};
+
+        if (width) {
+            styles.width = width;
+        }
+
+        if (height) {
+            styles.height = height;
+        }
 
         if (this.props.size) {
             styles.flexBasis = this.props.size;

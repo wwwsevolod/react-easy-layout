@@ -73,6 +73,16 @@ describe('Block', () => {
         expect(element.props.style.flexBasis).to.equals('auto');
     });
 
+    it('should not set width when no width is provided', () => {
+        const element = renderElement(<Block></Block>);
+        expect(element.props.style.width).to.be.undefined;
+    });
+
+    it('should set width when width is provided', () => {
+        const element = renderElement(<Block width="100%"></Block>);
+        expect(element.props.style.width).to.equal('100%');
+    });
+
     it('should set width and height in unit that was set', () => {
         const element = renderElement(<Block width="100vh" height="2000%"></Block>);
         expect(element.props.style.width).to.equal('100vh');
