@@ -197,8 +197,9 @@
 }
 
 
-.easy-layout-Box_fix.easy-layout-Box_type_Column, .easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse {
-
+.easy-layout-Box_fix.easy-layout-Box_type_Column .easy-layout-Block,
+.easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse .easy-layout-Block {
+    width: 100%;
 }
 
 .easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block, .easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block {

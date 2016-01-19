@@ -54,6 +54,8 @@ export default class Box extends Component {
 
     static TYPE_COLUMN = TYPE_COLUMN;
     static TYPE_ROW = TYPE_ROW;
+    static TYPE_COLUMN_REVERSE = TYPE_COLUMN_REVERSE;
+    static TYPE_ROW_REVERSE = TYPE_ROW_REVERSE;
 
     static NOWRAP = WRAP_NOWRAP;
     static WRAP = WRAP_WRAP;
