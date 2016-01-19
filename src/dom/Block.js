@@ -30,11 +30,15 @@ export default class Block extends Component {
         align: AUTO,
         grow: true,
         shrink: true,
+        width: '',
+        height: '',
         static: false
     };
 
     static propTypes = {
         size: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired,
+        height: PropTypes.string.isRequired,
         align: selfAlignPropType.isRequired,
         grow: PropTypes.bool.isRequired,
         shrink: PropTypes.bool.isRequired,
@@ -42,11 +46,24 @@ export default class Block extends Component {
     };
 
     render() {
+        let width = this.props.width;
+        if (parseInt(width, 10).toString() === width) {
+            width = `${width}px`;
+        }
+
+        let height = this.props.height;
+        if (parseInt(height, 10).toString() === height) {
+            height = `${height}px`;
+        }
+
         const styles = {
             flexBasis: this.props.size,
             WebkitFlexBasis: this.props.size,
-            MsFlexPreferredSize: this.props.size
+            MsFlexPreferredSize: this.props.size,
+            width: width,
+            height: height
         };
+
 
         return <div style={styles} className={bem({
             static: this.props.static,

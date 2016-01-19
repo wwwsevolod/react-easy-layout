@@ -56,4 +56,16 @@ describe('Block', () => {
             element.props.className.toString()
         ).to.match(/(^|\s)easy-layout-Block_shrink($|\s)/);
     });
+
+    it('should set width and height in pixels', () => {
+        const element = renderElement(<Block width="100" height="2000"></Block>);
+        expect(element.props.style.width).to.equal('100px');
+        expect(element.props.style.height).to.equal('2000px');
+    });
+
+    it('should set width and height in unit that was set', () => {
+        const element = renderElement(<Block width="100vh" height="2000%"></Block>);
+        expect(element.props.style.width).to.equal('100vh');
+        expect(element.props.style.height).to.equal('2000%');
+    });
 });
