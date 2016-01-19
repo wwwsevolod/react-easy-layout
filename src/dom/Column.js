@@ -32,7 +32,7 @@ export default class Column extends Component {
     static STRETCH = Box.STRETCH;
 
     static NOWRAP = Box.NOWRAP;
-    static WRAP = Box.WRAP_WRAP;
+    static WRAP = Box.WRAP;
     static WRAP_REVERSE = Box.WRAP_REVERSE;
 
     static propTypes = {
