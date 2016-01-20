@@ -209,15 +209,3 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
-.easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block:first-of-type,
-.easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block:first-of-type  {
-    padding-top: 20px;
-    padding-bottom: 10px;
-}
-
-.easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block:last-of-type,
-.easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block:last-of-type {
-    padding-top: 10px;
-    padding-bottom: 20px;
-}
