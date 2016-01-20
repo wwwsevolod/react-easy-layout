@@ -27,19 +27,21 @@ export default class Block extends Component {
 
     static defaultProps = {
         size: '',
-        align: AUTO,
+        alignSelf: AUTO,
         grow: true,
         shrink: true,
         width: '',
         height: '',
+        isRowWrapper: false,
         static: false
     };
 
     static propTypes = {
+        isRowWrapper: PropTypes.bool.isRequired,
         size: PropTypes.string.isRequired,
         width: PropTypes.string.isRequired,
         height: PropTypes.string.isRequired,
-        align: selfAlignPropType.isRequired,
+        alignSelf: selfAlignPropType.isRequired,
         grow: PropTypes.bool.isRequired,
         shrink: PropTypes.bool.isRequired,
         static: PropTypes.bool.isRequired
@@ -74,8 +76,9 @@ export default class Block extends Component {
 
 
         return <div style={styles} className={bem({
+            isRowWrapper: this.props.isRowWrapper,
             static: this.props.static,
-            align: this.props.align,
+            alignSelf: this.props.alignSelf,
             grow: this.props.grow && !this.props.static,
             noGrow: !this.props.grow || this.props.static,
             shrink: this.props.shrink && !this.props.static,

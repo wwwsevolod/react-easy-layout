@@ -11,12 +11,12 @@ render(
             <Row>
                 <Block static={true}>
                     <div className="RowExample__Left">
-                        Left
+                    Left
                     </div>
                 </Block>
                 <Block>
                     <div className="RowExample__Right">
-                        Right
+                    Right
                     </div>
                 </Block>
             </Row>
@@ -25,48 +25,74 @@ render(
             <Row>
                 <Block static={true}>
                     <div className="RowExample__Left">
-                        Left
+                    Left
                     </div>
                 </Block>
                 <Block>
                     <div className="RowExample__Right">
-                        Right
+                    Right
                     </div>
                 </Block>
                 <Block static={true}>
                     <div className="RowExample__Left">
-                        Left
+                    Left
                     </div>
                 </Block>
                 <Block static={true}>
                     <div className="RowExample__Left">
-                        Left
+                    Left
+                    </div>
+                </Block>
+            </Row>
+        </div>
+        <div className="RowExample">
+            <Row height="100%" fix={false}>
+                <Block static={true}>
+                    <div className="RowExample__Left">
+                    Left
+                    </div>
+                </Block>
+                <Block alignSelf={Block.TO_END}>
+                    <div className="RowExample__Right">
+                    Right
+                    </div>
+                </Block>
+                <Block static={true}>
+                    <div className="RowExample__Left">
+                    Left
+                    </div>
+                </Block>
+                <Block static={true}>
+                    <div className="RowExample__Left">
+                    Left
                     </div>
                 </Block>
             </Row>
         </div>
         <div className="RowExample">
             <Row height="100%">
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                        Left
-                    </div>
-                </Block>
-                <Block align={Block.TO_END}>
-                    <div className="RowExample__Right">
-                        Right
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                        Left
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                        Left
-                    </div>
-                </Block>
+                <Column>
+                    <Block static={true}>
+                        <div className="RowExample__Left">
+                            Left
+                        </div>
+                    </Block>
+                    <Block alignSelf={Block.TO_END}>
+                        <div className="RowExample__Right">
+                            Right
+                        </div>
+                    </Block>
+                    <Block static={true}>
+                        <div className="RowExample__Left">
+                            Left
+                        </div>
+                    </Block>
+                    <Block static={true}>
+                        <div className="RowExample__Left">
+                            Left
+                        </div>
+                    </Block>
+                </Column>
             </Row>
         </div>
     </div>,

@@ -1,31 +1,47 @@
 import React, {Component, PropTypes} from 'react';
 import Box from './Box';
+import Block from './Block';
 
 import {
     alignPropType,
     contentPropType,
+    selfAlignPropType,
     justifyPropType
 } from '../propTypes';
 
+import {
+    AUTO
+} from '../constants';
+
 export default class Column extends Component {
     render() {
-        return <Box
-            type={this.props.reverse ? Box.TYPE_COLUMN_REVERSE : Box.TYPE_COLUMN}
-            wrap={this.props.wrap}
-            align={this.props.align}
-            justify={this.props.justify}
-            content={this.props.content}
-            fix={this.props.fix}
+        return <Block
             height={this.props.height}
-            width={this.props.width}
-        >
-            {this.props.children}
-        </Box>;
+            size={this.props.size}
+            alignSelf={this.props.alignSelf}
+            grow={this.props.grow}
+            shrink={this.props.shrink}
+            static={this.props.static}
+               >
+            <Box
+                type={this.props.reverse ? Box.TYPE_COLUMN_REVERSE : Box.TYPE_COLUMN}
+                wrap={this.props.wrap}
+                align={this.props.align}
+                justify={this.props.justify}
+                content={this.props.content}
+                fix={this.props.fix}
+                width={this.props.width}
+                height={this.props.height}
+            >
+                {this.props.children}
+            </Box>
+        </Block>;
     }
 
     static SPACE_BETWEEN = Box.SPACE_BETWEEN;
     static SPACE_AROUND = Box.SPACE_AROUND;
     static CENTER = Box.CENTER;
+    static AUTO = AUTO;
     static TO_START = Box.TO_START;
     static TO_END = Box.TO_END;
     static BASELINE = Box.BASELINE;
@@ -43,7 +59,14 @@ export default class Column extends Component {
         width: PropTypes.string.isRequired,
         height: PropTypes.string.isRequired,
         fix: PropTypes.bool.isRequired,
-        wrap: PropTypes.string.isRequired
+        wrap: PropTypes.string.isRequired,
+
+        // Wrapper Block props
+        size: PropTypes.string.isRequired,
+        alignSelf: selfAlignPropType.isRequired,
+        grow: PropTypes.bool.isRequired,
+        shrink: PropTypes.bool.isRequired,
+        static: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
@@ -54,6 +77,13 @@ export default class Column extends Component {
         justify: Box.TO_START,
         width: '100%',
         height: 'auto',
-        fix: true
+        fix: true,
+
+
+        size: '',
+        alignSelf: AUTO,
+        grow: true,
+        shrink: true,
+        static: false
     };
 }
