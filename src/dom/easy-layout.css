@@ -206,6 +206,6 @@
 }
 
 .easy-layout-Box_fix.easy-layout-Box_type_Column > .easy-layout-Block, .easy-layout-Box_fix.easy-layout-Box_type_ColumnReverse > .easy-layout-Block {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
