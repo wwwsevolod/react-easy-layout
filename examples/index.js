@@ -1,7 +1,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Column, Block, Row} from '../src';
-import {Cell, Table} from '../src/dom/Table';
+import {Cell, Table} from '../src/dom-table';
 import 'normalize.css';
 import '../src/dom/easy-layout.css';
 import './index.css';

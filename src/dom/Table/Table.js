@@ -86,15 +86,15 @@ export default class Table extends Component {
     };
 
     scrollListener = (event) => {
-        this.updateScrollState();
+        this.updateScrollState(this.props);
     };
 
-    updateScrollState() {
+    updateScrollState(props) {
         const table = findDOMNode(this.refs.table);
 
-        const scrollTop = this.props.scrollTopGetter(table, this.nodeWithScroll);
-        const availHeight = this.props.tableMaxViewportGetter(table, this.nodeWithScroll);
-        const viewportStart = this.props.tableViewportStartGetter(table, this.nodeWithScroll);
+        const scrollTop = props.scrollTopGetter(table, this.nodeWithScroll);
+        const availHeight = props.tableMaxViewportGetter(table, this.nodeWithScroll);
+        const viewportStart = props.tableViewportStartGetter(table, this.nodeWithScroll);
 
         let shouldUpdate = false;
         const newState = {};
@@ -119,17 +119,36 @@ export default class Table extends Component {
         }
     }
 
-    componentDidMount() {
-        this.nodeWithScroll = this.props.parentWithScrollGetter(findDOMNode(this.refs.table));
-        this.nodeWithScroll.addEventListener('scroll', this.scrollListener, false);
-
-        this.updateScrollState();
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.parentWithScrollGetter() !== this.nodeWithScroll) {
+            this.clearScrollListener();
+            this.setUpScrollListener(nextProps);
+        }
     }
 
-    componentWillUnmount() {
+    setUpScrollListener(props) {
+        this.nodeWithScroll = props.parentWithScrollGetter(findDOMNode(this.refs.table));
+
+        if (!this.nodeWithScroll) {
+            return;
+        }
+
+        this.updateScrollState(props);
+        this.nodeWithScroll.addEventListener('scroll', this.scrollListener, false);
+    }
+
+    clearScrollListener() {
         if (this.nodeWithScroll) {
             this.nodeWithScroll.removeEventListener('scroll', this.scrollListener, false);
         }
+    }
+
+    componentDidMount() {
+        this.setUpScrollListener(this.props);
+    }
+
+    componentWillUnmount() {
+        this.clearScrollListener();
     }
 
     renderColumns() {
