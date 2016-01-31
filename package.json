@@ -4,7 +4,7 @@
   "description": "Advanced react layout library that easy to use",
   "main": "lib/index.js",
   "scripts": {
-    "clean": "$(npm bin)/rimraf lib && mkdir lib && mkdir lib/dom",
+    "clean": "$(npm bin)/rimraf lib && $(npm bin)/rimraf coverage && mkdir lib && mkdir lib/dom",
     "test": "NODE_PATH=./src NODE_ENV=test $(npm bin)/_mocha --compilers js:babel-register --require ./testHelper.js --recursive test/**/*.unit.js",
     "test:cov": "NODE_PATH=./src NODE_ENV=test $(npm bin)/babel-node ./node_modules/isparta/bin/isparta cover --include-all-sources --report text node_modules/mocha/bin/_mocha -- --require ./testHelper.js --recursive test/**/*.unit.js",
     "test:watch": "npm run test -- --watch",

@@ -30,14 +30,14 @@ function defaultTableMaxViewportGetter(tableNode, nodeWithScroll) {
 function defaultGetCurrentFirstRowIndex({scrollTop, availHeight, viewportStart, rowHeight, rowsCount}) {
     // const start = Math.floor((((scrollTop + availHeight) - viewportStart)) / rowHeight);
     const start = Math.floor(Math.max(0, scrollTop - viewportStart) / rowHeight);
-    const preload = Math.min(rowsCount / 5, (availHeight / 2) / rowHeight);
+    const preload = availHeight / rowHeight;
 
     return Math.max(0, Math.floor(start - preload));
 }
 
 function defaultGetCurrentLastRowIndex({scrollTop, availHeight, viewportStart, rowHeight, rowsCount}) {
     const end = Math.floor(Math.max(0, (scrollTop - viewportStart) + availHeight) / rowHeight);
-    const preload = Math.min(rowsCount / 5, (availHeight / 2) / rowHeight);
+    const preload = availHeight / rowHeight;
 
     return Math.min(rowsCount, Math.floor(end + preload));
 }
