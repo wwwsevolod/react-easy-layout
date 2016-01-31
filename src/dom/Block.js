@@ -75,7 +75,7 @@ export default class Block extends Component {
         }
 
 
-        return <div style={styles} className={bem({
+        return <div {...this.props} style={styles} className={(this.props.className  || '') + ' ' + bem({
             isRowWrapper: this.props.isRowWrapper,
             static: this.props.static,
             alignSelf: this.props.alignSelf,

@@ -25,3 +25,8 @@ body {
     background: blue;
     height: 100%;
 }
+
+
+.odd {
+    background: lightgray;
+}
