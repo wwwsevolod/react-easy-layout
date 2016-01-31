@@ -133,8 +133,8 @@ export default class Table extends Component {
             return;
         }
 
-        this.updateScrollState(props);
         this.nodeWithScroll.addEventListener('scroll', this.scrollListener, false);
+        this.updateScrollState(props);
     }
 
     clearScrollListener() {
