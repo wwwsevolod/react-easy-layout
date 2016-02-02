@@ -177,13 +177,24 @@ export default class Table extends Component {
             if (column.props.header) {
                 const header = column.props.header({
                     columnKey: column.columnKey,
-                    rowHeight: this.props.rowHeight,
+                    height: this.props.rowHeight,
                     scrollTop: this.state.scrollTop,
                     availHeight: this.state.availHeight,
                     viewportStart: this.state.viewportStart,
                     rowsCount: this.props.rowsCount,
                     rowHeight: this.props.rowHeight
                 });
+
+                const child = header.type === Cell ? cloneElement(header, Object.assign({
+                }, header.props, {
+                    height: `${this.props.rowHeight}px`,
+                    key: '__@header@__'
+                }), header.props.children) : (<Cell
+                    height={`${this.props.rowHeight}px`}
+                    key={'__@header@__'}
+                >
+                    {header}
+                </Cell>);
 
                 childrenOfColumn.push(header);
             }
@@ -271,6 +282,17 @@ export default class Table extends Component {
                     rowsCount: this.props.rowsCount,
                     rowHeight: this.props.rowHeight
                 });
+
+                const child = footer.type === Cell ? cloneElement(footer, Object.assign({
+                }, footer.props, {
+                    height: `${this.props.rowHeight}px`,
+                    key: '__@footer@__'
+                }), footer.props.children) : (<Cell
+                    height={`${this.props.rowHeight}px`}
+                    key={'__@footer@__'}
+                >
+                    {footer}
+                </Cell>);
 
                 column.props.children.push(footer);
             }

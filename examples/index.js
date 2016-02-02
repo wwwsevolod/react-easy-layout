@@ -103,6 +103,12 @@ render(
                 rowClassNameGetter={(index) => index % 2 ? 'odd' : 'even'}
             >
                 <Column
+                    header={() => <Cell>
+                        ID
+                    </Cell>}
+                    footer={() => <Cell>
+                        huid
+                    </Cell>}
                     width="100"
                     static={true}
                     cell={({rowIndex}) => <Cell>
@@ -110,60 +116,34 @@ render(
                     </Cell>}
                 />
                 <Column
+                    header={() => <Cell>
+                        ID1
+                    </Cell>}
+                    footer={() => <Cell>
+                        huid1
+                    </Cell>}
                     cell={({rowIndex}) => <Cell>
                         count: {Math.floor(rowIndex * 1000)}
                     </Cell>}
                 />
                 <Column
+                    header={() => <Cell>
+                        ID2
+                    </Cell>}
+                    footer={() => <Cell>
+                        huid2
+                    </Cell>}
                     cell={({rowIndex}) => <Cell>
                         asd: {rowIndex + 100500}
                     </Cell>}
                 />
                 <Column
-                    cell={({rowIndex}) => <Cell>
-                        isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
+                    header={() => <Cell>
+                        ID3
                     </Cell>}
-                />
-                <Column
-                    width="100"
-                    static={true}
-                    cell={({rowIndex}) => <Cell>
-                        id: {rowIndex}
+                    footer={() => <Cell>
+                        huid3
                     </Cell>}
-                />
-                <Column
-                    cell={({rowIndex}) => <Cell>
-                        count: {Math.floor(rowIndex * 1000)}
-                    </Cell>}
-                />
-                <Column
-                    cell={({rowIndex}) => <Cell>
-                        asd: {rowIndex + 100500}
-                    </Cell>}
-                />
-                <Column
-                    cell={({rowIndex}) => <Cell>
-                        isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Cell>}
-                />
-                <Column
-                    width="100"
-                    static={true}
-                    cell={({rowIndex}) => <Cell>
-                        id: {rowIndex}
-                    </Cell>}
-                />
-                <Column
-                    cell={({rowIndex}) => <Cell>
-                        count: {Math.floor(rowIndex * 1000)}
-                    </Cell>}
-                />
-                <Column
-                    cell={({rowIndex}) => <Cell>
-                        asd: {rowIndex + 100500}
-                    </Cell>}
-                />
-                <Column
                     cell={({rowIndex}) => <Cell>
                         isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
                     </Cell>}
