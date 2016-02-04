@@ -2,6 +2,7 @@ import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 import bem from '../bem';
 
+import Row from '../Row';
 import Column from '../Column';
 import Block from '../Block';
 
@@ -41,23 +42,26 @@ function defaultGetCurrentLastRowIndex({scrollTop, availHeight, viewportStart, r
 
 const block = bem('Table');
 
-class Cell extends Component {
+class TableCell extends Component {
     render() {
-        return <td {...this.props}>
+        return <Block {...this.props}>
             {this.props.children}
-        </td>;
+        </Block>;
     }
 }
 
-class Row extends Component {
+class TableRow extends Component {
     render() {
-        return <tr {...this.props}>
+        return <Row {...this.props} fix={false}>
             {this.props.children}
-        </tr>;
+        </Row>;
     }
 }
 
 export default class Table extends Component {
+    static Cell = TableCell;
+    static Row = TableRow;
+
     static propTypes = {
         rowHeight: PropTypes.number.isRequired,
         headerHeight: PropTypes.number,
@@ -80,9 +84,6 @@ export default class Table extends Component {
 
         rowClassNameGetter: PropTypes.func
     };
-
-    static Cell = Cell;
-    static Row = Row;
 
 
     static defaultProps = {
@@ -205,18 +206,17 @@ export default class Table extends Component {
         const fakeTopCellHeightSize = fromIndex * this.props.rowHeight;
         const fakeBottomCellHeightSize = Math.max(0, this.props.rowsCount - toIndex) * this.props.rowHeight;
 
-        let theadValue = null;
         const rows = [];
-        let tfootValue = null;
 
         if (this.props.header) {
-            theadValue = this.props.header();
+            rows.push(this.props.header());
         }
 
         if (fakeTopCellHeightSize) {
-            rows.push(<Row
+            rows.push(<TableRow
                 key="__fake-top__"
-            ><Cell style={{height: fakeTopCellHeightSize}} /></Row>);
+                height={fakeTopCellHeightSize + 'px'}
+            ></TableRow>);
         }
 
         for (var index = fromIndex; index < toIndex; index++) {// eslint-disable-line no-var
@@ -231,35 +231,26 @@ export default class Table extends Component {
         }
 
         if (fakeBottomCellHeightSize) {
-            rows.push(<Row
+            rows.push(<TableRow
                 key="__fake-bottom__"
-            ><Cell style={{height: fakeBottomCellHeightSize}} /></Row>);
+                height={fakeBottomCellHeightSize + 'px'}
+            ></TableRow>);
         }
 
         if (this.props.footer) {
-            tfootValue = this.props.footer();
+            rows.push(this.props.footer());
         }
 
-        return [
-            theadValue ? <thead key="__header__">
-                {theadValue}
-            </thead> : null,
-            <tbody key="__body__">
-                {rows}
-            </tbody>,
-            tfootValue ? <tfoot key="__footer__">
-                {tfootValue}
-            </tfoot> : null
-        ];
+        return rows;
     }
 
     render() {
-        return <table
+        return <Column
             ref="table"
             wrap={Row.NOWRAP}
             fix={false}
         >
             {this.renderRows()}
-        </table>;
+        </Column>;
     }
 }
