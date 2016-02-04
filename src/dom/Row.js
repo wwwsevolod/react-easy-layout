@@ -19,6 +19,7 @@ export default class Row extends Component {
             height={this.props.height}
             size={this.props.size}
             alignSelf={this.props.alignSelf}
+            className={this.props.className}
             grow={this.props.grow}
             shrink={this.props.shrink}
             static={this.props.static}

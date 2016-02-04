@@ -75,7 +75,7 @@ export default class Block extends Component {
         }
 
 
-        return <div {...this.props} style={styles} className={(this.props.className  || '') + ' ' + bem({
+        return <div {...this.props} style={styles} className={bem({
             isRowWrapper: this.props.isRowWrapper,
             static: this.props.static,
             alignSelf: this.props.alignSelf,
@@ -83,7 +83,7 @@ export default class Block extends Component {
             noGrow: !this.props.grow || this.props.static,
             shrink: this.props.shrink && !this.props.static,
             noShrink: !this.props.shrink || this.props.static
-        })}>
+        }) + ' ' + (this.props.className  || '')}>
             {this.props.children}
         </div>;
     }
