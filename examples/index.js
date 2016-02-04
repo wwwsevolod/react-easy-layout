@@ -99,7 +99,7 @@ render(
         <div className="TableExample">
             <Table
                 rowHeight={30}
-                rowsCount={100000}
+                rowsCount={10000}
                 rowClassNameGetter={(index) => index % 2 ? 'odd' : 'even'}
 
                 header={() => <Row
