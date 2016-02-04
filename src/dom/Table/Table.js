@@ -171,16 +171,9 @@ export default class Table extends Component {
         const fakeTopCellHeightSize = fromIndex * this.props.rowHeight;
         const fakeBottomCellHeightSize = Math.max(0, this.props.rowsCount - toIndex) * this.props.rowHeight;
 
-        const headerRow = [];
-        const rows = [];
-
-        if (fakeTopCellHeightSize) {
-            rows.push(<Row key="__@fake-top@__" fix={false}>
-                <Cell height={`${fakeTopCellHeightSize}px`} />
-            </Row>);
-        }
-
         const columns = Children.map(this.props.children, (column, index) => {
+            const childrenOfColumn = [];
+
             if (column.props.header) {
                 const header = column.props.header({
                     columnKey: column.columnKey,
@@ -195,29 +188,29 @@ export default class Table extends Component {
                 const child = header.type === Cell ? cloneElement(header, Object.assign({
                 }, header.props, {
                     height: `${this.props.rowHeight}px`,
-                    width: `${column.props.width}px`,
-                    key: '__@header@__' + index
+                    key: '__@header@__'
                 }), header.props.children) : (<Cell
                     height={`${this.props.rowHeight}px`}
-                    width={`${column.props.width}px`}
-                    key={'__@header@__' + index}
+                    key={'__@header@__'}
                 >
                     {header}
                 </Cell>);
 
-                headerRow.push(header);
+                childrenOfColumn.push(header);
             }
 
-            return column;
+            if (fakeTopCellHeightSize) {
+                childrenOfColumn.push(<Cell key="__@fake-top@__" height={`${fakeTopCellHeightSize}px`} />);
+            }
+
+            return cloneElement(column, Object.assign({}, column.props, {
+                fix: false,
+                key: column.columnKey || index
+            }), childrenOfColumn);
         });
 
-        rows.push(<Row key="__@heaader@__" fix={false}>
-            {headerRow}
-        </Row>);
-
         for (let index = fromIndex; index < toIndex; index++) {
-            const row = [];
-            columns.forEach((column, colIndex) => {
+            columns.forEach((column) => {
                 let className = block('Row');
 
                 if (this.props.rowClassNameGetter) {
@@ -241,49 +234,44 @@ export default class Table extends Component {
                 }, cell.props, {
                     height: `${this.props.rowHeight}px`,
                     className: (cell.props.className || '') + ' ' + className,
-                    // onMouseOver: (event) => {
-                    //     if (onMouseOver) {
-                    //         onMouseOver(event);
-                    //     }
-                    //
-                    //     this.props.onRowMouseOver(index);
-                    // },
-                    // onMouseOut: (event) => {
-                    //     if (onMouseOut) {
-                    //         onMouseOut(event);
-                    //     }
-                    //
-                    //     this.props.onRowMouseOut(index);
-                    // },
-                    key: colIndex
+                    onMouseOver: (event) => {
+                        if (onMouseOver) {
+                            onMouseOver(event);
+                        }
+
+                        this.props.onRowMouseOver(index);
+                    },
+                    onMouseOut: (event) => {
+                        if (onMouseOut) {
+                            onMouseOut(event);
+                        }
+
+                        this.props.onRowMouseOut(index);
+                    },
+                    key: this.props.getPrimaryKeyValue(index)
                 }), cell.props.children) : (<Cell
                     onMouseOver={(event) => this.props.onRowMouseOver(index)}
                     onMouseOut={(event) => this.props.onRowMouseOut(index)}
                     className={className}
                     height={`${this.props.rowHeight}px`}
-                    key={colIndex}
+                    key={this.props.getPrimaryKeyValue(index)}
                 >
                     {cell}
                 </Cell>);
 
 
-                row.push(child);
+                column.props.children.push(child);
             });
-
-            rows.push(<Row key={'row'+index} fix={false}>
-                {row}
-            </Row>);
         }
 
-        if (fakeBottomCellHeightSize) {
-            rows.push(<Row key="__@fake-bottom@__" fix={false}>
-                <Cell height={`${fakeBottomCellHeightSize}px`} />
-            </Row>);
-        }
+        columns.forEach((column) => {
+            if (fakeBottomCellHeightSize) {
+                column.props.children.push(<Cell
+                    key="__@fake-bottom@__"
+                    height={`${fakeBottomCellHeightSize}px`}
+                />);
+            }
 
-        const footerRow = [];
-
-        columns.forEach((column, index) => {
             if (column.props.footer) {
                 const footer = column.props.footer({
                     columnKey: column.columnKey,
@@ -298,32 +286,28 @@ export default class Table extends Component {
                 const child = footer.type === Cell ? cloneElement(footer, Object.assign({
                 }, footer.props, {
                     height: `${this.props.rowHeight}px`,
-                    key: '__@footer@__' + index
+                    key: '__@footer@__'
                 }), footer.props.children) : (<Cell
                     height={`${this.props.rowHeight}px`}
-                    key={'__@footer@__' + index}
+                    key={'__@footer@__'}
                 >
                     {footer}
                 </Cell>);
 
-                footerRow.push(footer);
+                column.props.children.push(footer);
             }
         });
 
-        rows.push(<Row key="__@foooter@__" fix={false}>
-            {footerRow}
-        </Row>);
-
-        return rows;
+        return columns;
     }
 
     render() {
-        return <Column
+        return <Row
             ref="table"
-            wrap={Column.NOWRAP}
+            wrap={Row.NOWRAP}
             fix={false}
         >
             {this.renderColumns()}
-        </Column>;
+        </Row>;
     }
 }
