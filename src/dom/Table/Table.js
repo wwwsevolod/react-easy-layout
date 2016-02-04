@@ -209,7 +209,14 @@ export default class Table extends Component {
         const rows = [];
 
         if (this.props.header) {
-            rows.push(this.props.header());
+            rows.push(this.props.header({
+                scrollTop: this.state.scrollTop,
+                availHeight: this.state.availHeight,
+                viewportStart: this.state.viewportStart,
+                rowsCount: this.props.rowsCount,
+                rowHeight: this.props.rowHeight,
+                fromIndex, toIndex
+            }));
         }
 
         if (fakeTopCellHeightSize) {
@@ -226,7 +233,8 @@ export default class Table extends Component {
                 viewportStart: this.state.viewportStart,
                 rowsCount: this.props.rowsCount,
                 rowHeight: this.props.rowHeight,
-                rowIndex: index
+                rowIndex: index,
+                fromIndex, toIndex
             }));
         }
 
@@ -238,7 +246,14 @@ export default class Table extends Component {
         }
 
         if (this.props.footer) {
-            rows.push(this.props.footer());
+            rows.push(this.props.footer({
+                scrollTop: this.state.scrollTop,
+                availHeight: this.state.availHeight,
+                viewportStart: this.state.viewportStart,
+                rowsCount: this.props.rowsCount,
+                rowHeight: this.props.rowHeight,
+                fromIndex, toIndex
+            }));
         }
 
         return rows;
