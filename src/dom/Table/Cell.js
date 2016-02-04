@@ -4,11 +4,13 @@ import Block from '../Block';
 
 export default class Cell extends Component {
     static propTypes = {
-        height: PropTypes.string.isRequired
+        height: PropTypes.string.isRequired,
+        width: PropTypes.string.isRequired
     };
 
     static defaultProps = {
-        height: ''
+        height: '',
+        width: ''
     };
 
     render() {
