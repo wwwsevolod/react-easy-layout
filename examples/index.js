@@ -101,54 +101,95 @@ render(
                 rowHeight={30}
                 rowsCount={100000}
                 rowClassNameGetter={(index) => index % 2 ? 'odd' : 'even'}
-            >
-                <Column
-                    header={() => <Cell>
+
+                header={() => <Row
+                    key="__header__"
+                >
+                    <Block static={true} width="100px">
                         ID
-                    </Cell>}
-                    footer={() => <Cell>
-                        huid
-                    </Cell>}
-                    width="100"
-                    static={true}
-                    cell={({rowIndex}) => <Cell>
-                        id: {rowIndex}
-                    </Cell>}
-                />
-                <Column
-                    header={() => <Cell>
+                    </Block>
+                    <Block static={true} width="200px">
                         ID1
-                    </Cell>}
-                    footer={() => <Cell>
-                        huid1
-                    </Cell>}
-                    cell={({rowIndex}) => <Cell>
-                        count: {Math.floor(rowIndex * 1000)}
-                    </Cell>}
-                />
-                <Column
-                    header={() => <Cell>
+                    </Block>
+                    <Block static={true} width="100px">
                         ID2
-                    </Cell>}
-                    footer={() => <Cell>
-                        huid2
-                    </Cell>}
-                    cell={({rowIndex}) => <Cell>
-                        asd: {rowIndex + 100500}
-                    </Cell>}
-                />
-                <Column
-                    header={() => <Cell>
+                    </Block>
+                    <Block>
                         ID3
-                    </Cell>}
-                    footer={() => <Cell>
-                        huid3
-                    </Cell>}
-                    cell={({rowIndex}) => <Cell>
+                    </Block>
+                    <Block static={true} width="100px">
+                        ID
+                    </Block>
+                    <Block static={true} width="200px">
+                        ID1
+                    </Block>
+                    <Block static={true} width="100px">
+                        ID2
+                    </Block>
+                    <Block>
+                        ID3
+                    </Block>
+                </Row>}
+
+                row={({rowIndex}) => <Row
+                    key={'row' + rowIndex}
+                    height="30px"
+                >
+                    <Block static={true} width="100px">
+                        id: {rowIndex}
+                    </Block>
+                    <Block static={true} width="200px">
+                        count: {Math.floor(rowIndex * 1000)}
+                    </Block>
+                    <Block static={true} width="100px">
+                        asd: {rowIndex + 100500}
+                    </Block>
+                    <Block>
                         isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Cell>}
-                />
-            </Table>
+                    </Block>
+                    <Block static={true} width="100px">
+                        id: {rowIndex}
+                    </Block>
+                    <Block static={true} width="200px">
+                        count: {Math.floor(rowIndex * 1000)}
+                    </Block>
+                    <Block static={true} width="100px">
+                        asd: {rowIndex + 100500}
+                    </Block>
+                    <Block>
+                        isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
+                    </Block>
+                </Row>}
+
+                footer={() => <Row
+                    key="__footer__"
+                >
+                    <Block static={true} width="100px">
+                        footer
+                    </Block>
+                    <Block static={true} width="200px">
+                        footer1
+                    </Block>
+                    <Block static={true} width="100px">
+                        footer2
+                    </Block>
+                    <Block>
+                        footer3
+                    </Block>
+                    <Block static={true} width="100px">
+                        footer
+                    </Block>
+                    <Block static={true} width="200px">
+                        footer1
+                    </Block>
+                    <Block static={true} width="100px">
+                        footer2
+                    </Block>
+                    <Block>
+                        footer3
+                    </Block>
+                </Row>}
+            />
         </div>
     </div>,
     document.querySelector('#app')

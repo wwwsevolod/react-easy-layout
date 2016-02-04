@@ -47,6 +47,7 @@ const block = bem('Table');
 export default class Table extends Component {
     static propTypes = {
         rowHeight: PropTypes.number.isRequired,
+        headerHeight: PropTypes.number,
         rowsCount: PropTypes.number.isRequired,
 
         onRowMouseOver: PropTypes.func.isRequired,
@@ -60,6 +61,10 @@ export default class Table extends Component {
         getCurrentLastRowIndex: PropTypes.func.isRequired,
         getPrimaryKeyValue: PropTypes.func.isRequired,
 
+        header: PropTypes.func,
+        row: PropTypes.func.isRequired,
+        footer: PropTypes.func,
+
         rowClassNameGetter: PropTypes.func
     };
 
@@ -71,6 +76,7 @@ export default class Table extends Component {
         scrollTopGetter: defaultScrollTopGetter,
         tableViewportStartGetter: defaultTableViewportStartGetter,
         tableMaxViewportGetter: defaultTableMaxViewportGetter,
+
         getPrimaryKeyValue(index) {
             return index;
         },
@@ -80,6 +86,8 @@ export default class Table extends Component {
     };
 
     state = {
+        toIndex: 0,
+        fromIndex: 0,
         scrollTop: 0,
         availHeight: 0,
         viewportStart: 0
@@ -111,6 +119,30 @@ export default class Table extends Component {
 
         if (viewportStart !== this.state.viewportStart) {
             newState.viewportStart = viewportStart;
+            shouldUpdate = true;
+        }
+
+        const fromIndex = this.props.getCurrentFirstRowIndex({
+            scrollTop: scrollTop,
+            availHeight: availHeight,
+            viewportStart: viewportStart,
+            rowsCount: this.props.rowsCount,
+            rowHeight: this.props.rowHeight
+        });
+
+        const toIndex = this.props.getCurrentLastRowIndex({
+            scrollTop: scrollTop,
+            availHeight: availHeight,
+            viewportStart: viewportStart,
+            rowsCount: this.props.rowsCount,
+            rowHeight: this.props.rowHeight
+        });
+
+        if (toIndex === this.state.toIndex && fromIndex === this.state.fromIndex) {
+            shouldUpdate = false;
+        } else {
+            newState.toIndex = toIndex;
+            newState.fromIndex = fromIndex;
             shouldUpdate = true;
         }
 
@@ -151,163 +183,57 @@ export default class Table extends Component {
         this.clearScrollListener();
     }
 
-    renderColumns() {
-        const fromIndex = this.props.getCurrentFirstRowIndex({
-            scrollTop: this.state.scrollTop,
-            availHeight: this.state.availHeight,
-            viewportStart: this.state.viewportStart,
-            rowsCount: this.props.rowsCount,
-            rowHeight: this.props.rowHeight
-        });
-
-        const toIndex = this.props.getCurrentLastRowIndex({
-            scrollTop: this.state.scrollTop,
-            availHeight: this.state.availHeight,
-            viewportStart: this.state.viewportStart,
-            rowsCount: this.props.rowsCount,
-            rowHeight: this.props.rowHeight
-        });
+    renderRows() {
+        const {fromIndex, toIndex} = this.state;
 
         const fakeTopCellHeightSize = fromIndex * this.props.rowHeight;
         const fakeBottomCellHeightSize = Math.max(0, this.props.rowsCount - toIndex) * this.props.rowHeight;
 
-        const columns = Children.map(this.props.children, (column, index) => {
-            const childrenOfColumn = [];
+        const rows = [];
 
-            if (column.props.header) {
-                const header = column.props.header({
-                    columnKey: column.columnKey,
-                    height: this.props.rowHeight,
-                    scrollTop: this.state.scrollTop,
-                    availHeight: this.state.availHeight,
-                    viewportStart: this.state.viewportStart,
-                    rowsCount: this.props.rowsCount,
-                    rowHeight: this.props.rowHeight
-                });
-
-                const child = header.type === Cell ? cloneElement(header, Object.assign({
-                }, header.props, {
-                    height: `${this.props.rowHeight}px`,
-                    key: '__@header@__'
-                }), header.props.children) : (<Cell
-                    height={`${this.props.rowHeight}px`}
-                    key={'__@header@__'}
-                >
-                    {header}
-                </Cell>);
-
-                childrenOfColumn.push(header);
-            }
-
-            if (fakeTopCellHeightSize) {
-                childrenOfColumn.push(<Cell key="__@fake-top@__" height={`${fakeTopCellHeightSize}px`} />);
-            }
-
-            return cloneElement(column, Object.assign({}, column.props, {
-                fix: false,
-                key: column.columnKey || index
-            }), childrenOfColumn);
-        });
-
-        for (let index = fromIndex; index < toIndex; index++) {
-            columns.forEach((column) => {
-                let className = block('Row');
-
-                if (this.props.rowClassNameGetter) {
-                    className += ' ' + this.props.rowClassNameGetter(index, column.columnKey);
-                }
-
-                const cell = column.props.cell({
-                    columnKey: column.columnKey,
-                    rowIndex: index,
-                    height: this.props.rowHeight,
-                    scrollTop: this.state.scrollTop,
-                    availHeight: this.state.availHeight,
-                    viewportStart: this.state.viewportStart,
-                    rowsCount: this.props.rowsCount,
-                    rowHeight: this.props.rowHeight
-                });
-
-                const {onMouseOver, onMouseOut} = cell.props;
-
-                const child = cell.type === Cell ? cloneElement(cell, Object.assign({
-                }, cell.props, {
-                    height: `${this.props.rowHeight}px`,
-                    className: (cell.props.className || '') + ' ' + className,
-                    onMouseOver: (event) => {
-                        if (onMouseOver) {
-                            onMouseOver(event);
-                        }
-
-                        this.props.onRowMouseOver(index);
-                    },
-                    onMouseOut: (event) => {
-                        if (onMouseOut) {
-                            onMouseOut(event);
-                        }
-
-                        this.props.onRowMouseOut(index);
-                    },
-                    key: this.props.getPrimaryKeyValue(index)
-                }), cell.props.children) : (<Cell
-                    onMouseOver={(event) => this.props.onRowMouseOver(index)}
-                    onMouseOut={(event) => this.props.onRowMouseOut(index)}
-                    className={className}
-                    height={`${this.props.rowHeight}px`}
-                    key={this.props.getPrimaryKeyValue(index)}
-                >
-                    {cell}
-                </Cell>);
-
-
-                column.props.children.push(child);
-            });
+        if (this.props.header) {
+            rows.push(this.props.header());
         }
 
-        columns.forEach((column) => {
-            if (fakeBottomCellHeightSize) {
-                column.props.children.push(<Cell
-                    key="__@fake-bottom@__"
-                    height={`${fakeBottomCellHeightSize}px`}
-                />);
-            }
+        if (fakeTopCellHeightSize) {
+            rows.push(<Row
+                key="__fake-top__"
+                height={fakeTopCellHeightSize + 'px'}
+            ></Row>);
+        }
 
-            if (column.props.footer) {
-                const footer = column.props.footer({
-                    columnKey: column.columnKey,
-                    height: this.props.rowHeight,
-                    scrollTop: this.state.scrollTop,
-                    availHeight: this.state.availHeight,
-                    viewportStart: this.state.viewportStart,
-                    rowsCount: this.props.rowsCount,
-                    rowHeight: this.props.rowHeight
-                });
+        for (var index = fromIndex; index < toIndex; index++) {// eslint-disable-line no-var
+            rows.push(this.props.row({
+                scrollTop: this.state.scrollTop,
+                availHeight: this.state.availHeight,
+                viewportStart: this.state.viewportStart,
+                rowsCount: this.props.rowsCount,
+                rowHeight: this.props.rowHeight,
+                rowIndex: index
+            }));
+        }
 
-                const child = footer.type === Cell ? cloneElement(footer, Object.assign({
-                }, footer.props, {
-                    height: `${this.props.rowHeight}px`,
-                    key: '__@footer@__'
-                }), footer.props.children) : (<Cell
-                    height={`${this.props.rowHeight}px`}
-                    key={'__@footer@__'}
-                >
-                    {footer}
-                </Cell>);
+        if (fakeBottomCellHeightSize) {
+            rows.push(<Row
+                key="__fake-bottom__"
+                height={fakeBottomCellHeightSize + 'px'}
+            ></Row>);
+        }
 
-                column.props.children.push(footer);
-            }
-        });
+        if (this.props.footer) {
+            rows.push(this.props.footer());
+        }
 
-        return columns;
+        return rows;
     }
 
     render() {
-        return <Row
+        return <Column
             ref="table"
             wrap={Row.NOWRAP}
             fix={false}
         >
-            {this.renderColumns()}
-        </Row>;
+            {this.renderRows()}
+        </Column>;
     }
 }
