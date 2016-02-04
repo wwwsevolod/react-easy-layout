@@ -2,10 +2,8 @@ import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 import bem from '../bem';
 
-import Row from '../Row';
 import Column from '../Column';
 import Block from '../Block';
-import Cell from './Cell';
 
 function defaultParentWithScrollGetter(tableNode) {
     return document;
@@ -43,6 +41,22 @@ function defaultGetCurrentLastRowIndex({scrollTop, availHeight, viewportStart, r
 
 const block = bem('Table');
 
+class Cell extends Component {
+    render() {
+        return <td {...this.props}>
+            {this.props.children}
+        </td>;
+    }
+}
+
+class Row extends Component {
+    render() {
+        return <tr {...this.props}>
+            {this.props.children}
+        </tr>;
+    }
+}
+
 export default class Table extends Component {
     static propTypes = {
         rowHeight: PropTypes.number.isRequired,
@@ -66,6 +80,9 @@ export default class Table extends Component {
 
         rowClassNameGetter: PropTypes.func
     };
+
+    static Cell = Cell;
+    static Row = Row;
 
 
     static defaultProps = {
@@ -188,17 +205,18 @@ export default class Table extends Component {
         const fakeTopCellHeightSize = fromIndex * this.props.rowHeight;
         const fakeBottomCellHeightSize = Math.max(0, this.props.rowsCount - toIndex) * this.props.rowHeight;
 
+        let theadValue = null;
         const rows = [];
+        let tfootValue = null;
 
         if (this.props.header) {
-            rows.push(this.props.header());
+            theadValue = this.props.header();
         }
 
         if (fakeTopCellHeightSize) {
             rows.push(<Row
                 key="__fake-top__"
-                height={fakeTopCellHeightSize + 'px'}
-            ></Row>);
+            ><Cell style={{height: fakeTopCellHeightSize}} /></Row>);
         }
 
         for (var index = fromIndex; index < toIndex; index++) {// eslint-disable-line no-var
@@ -215,24 +233,33 @@ export default class Table extends Component {
         if (fakeBottomCellHeightSize) {
             rows.push(<Row
                 key="__fake-bottom__"
-                height={fakeBottomCellHeightSize + 'px'}
-            ></Row>);
+            ><Cell style={{height: fakeBottomCellHeightSize}} /></Row>);
         }
 
         if (this.props.footer) {
-            rows.push(this.props.footer());
+            tfootValue = this.props.footer();
         }
 
-        return rows;
+        return [
+            theadValue ? <thead key="__header__">
+                {theadValue}
+            </thead> : null,
+            <tbody key="__body__">
+                {rows}
+            </tbody>,
+            tfootValue ? <tfoot key="__footer__">
+                {tfootValue}
+            </tfoot> : null
+        ];
     }
 
     render() {
-        return <Column
+        return <table
             ref="table"
             wrap={Row.NOWRAP}
             fix={false}
         >
             {this.renderRows()}
-        </Column>;
+        </table>;
     }
 }

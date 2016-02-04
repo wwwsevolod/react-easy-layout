@@ -102,93 +102,93 @@ render(
                 rowsCount={10000}
                 rowClassNameGetter={(index) => index % 2 ? 'odd' : 'even'}
 
-                header={() => <Row
+                header={() => <Table.Row
                     key="__header__"
                 >
-                    <Block static={true} width="100px">
+                    <Table.Cell static={true} width="100px">
                         ID
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         ID1
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         ID2
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         ID3
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         ID
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         ID1
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         ID2
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         ID3
-                    </Block>
-                </Row>}
+                    </Table.Cell>
+                </Table.Row>}
 
-                row={({rowIndex}) => <Row
+                row={({rowIndex}) => <Table.Row
                     key={'row' + rowIndex}
                     height="30px"
                 >
-                    <Block static={true} width="100px">
+                    <Table.Cell static={true} width="100px">
                         id: {rowIndex}
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         count: {Math.floor(rowIndex * 1000)}
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         asd: {rowIndex + 100500}
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         id: {rowIndex}
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         count: {Math.floor(rowIndex * 1000)}
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         asd: {rowIndex + 100500}
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Block>
-                </Row>}
+                    </Table.Cell>
+                </Table.Row>}
 
-                footer={() => <Row
+                footer={() => <Table.Row
                     key="__footer__"
                 >
-                    <Block static={true} width="100px">
+                    <Table.Cell static={true} width="100px">
                         footer
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         footer1
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         footer2
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         footer3
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         footer
-                    </Block>
-                    <Block static={true} width="200px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="200px">
                         footer1
-                    </Block>
-                    <Block static={true} width="100px">
+                    </Table.Cell>
+                    <Table.Cell static={true} width="100px">
                         footer2
-                    </Block>
-                    <Block>
+                    </Table.Cell>
+                    <Table.Cell>
                         footer3
-                    </Block>
-                </Row>}
+                    </Table.Cell>
+                </Table.Row>}
             />
         </div>
     </div>,
