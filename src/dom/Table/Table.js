@@ -1,10 +1,12 @@
 import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 import bem from '../bem';
-
+import AnimationFrame from 'animation-frame';
 import Row from '../Row';
 import Column from '../Column';
 import Block from '../Block';
+
+const animationFrame = new AnimationFrame();
 
 function defaultParentWithScrollGetter(tableNode) {
     return document;
@@ -111,7 +113,17 @@ export default class Table extends Component {
     };
 
     scrollListener = (event) => {
-        this.updateScrollState(this.props);
+        if (this.frameId) {
+            animationFrame.cancel(this.frameId);
+        }
+
+        this.frameId = animationFrame.request(() => {
+            this.frameId = animationFrame.request(() => {
+                this.frameId = animationFrame.request(() => {
+                    this.updateScrollState(this.props);
+                });
+            });
+        });
     };
 
     updateScrollState(props) {
