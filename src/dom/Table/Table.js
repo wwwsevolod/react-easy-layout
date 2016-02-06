@@ -127,6 +127,9 @@ export default class Table extends Component {
     };
 
     updateScrollState(props) {
+        if (!this.nodeWithScroll) {
+            return;
+        }
         const table = findDOMNode(this.refs.table);
 
         const scrollTop = props.scrollTopGetter(table, this.nodeWithScroll);
@@ -181,7 +184,8 @@ export default class Table extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.parentWithScrollGetter() !== this.nodeWithScroll) {
+        const table = findDOMNode(this.refs.table);
+        if (nextProps.parentWithScrollGetter(table) !== this.nodeWithScroll) {
             this.clearScrollListener();
             this.setUpScrollListener(nextProps);
         }
