@@ -144,24 +144,25 @@ export default class Table extends Component {
         const table = findDOMNode(this.refs.table);
 
         const scrollTop = props.scrollTopGetter(table, this.nodeWithScroll);
+        const scrollLeft = props.scrollLeftGetter(table, this.nodeWithScroll);
         const availHeight = props.tableMaxViewportGetter(table, this.nodeWithScroll);
         const viewportStart = props.tableViewportStartGetter(table, this.nodeWithScroll);
 
         let shouldUpdate = false;
         const newState = {};
 
+        newState.scrollTop = scrollTop;
         if (scrollTop !== this.state.scrollTop) {
-            newState.scrollTop = scrollTop;
             shouldUpdate = true;
         }
 
+        newState.availHeight = availHeight;
         if (availHeight !== this.state.availHeight) {
-            newState.availHeight = availHeight;
             shouldUpdate = true;
         }
 
+        newState.viewportStart = viewportStart;
         if (viewportStart !== this.state.viewportStart) {
-            newState.viewportStart = viewportStart;
             shouldUpdate = true;
         }
 
@@ -181,11 +182,17 @@ export default class Table extends Component {
             rowHeight: this.props.rowHeight
         });
 
+        newState.toIndex = toIndex;
+        newState.fromIndex = fromIndex;
+
         if (toIndex === this.state.toIndex && fromIndex === this.state.fromIndex) {
             shouldUpdate = false;
         } else {
-            newState.toIndex = toIndex;
-            newState.fromIndex = fromIndex;
+            shouldUpdate = true;
+        }
+
+        newState.scrollLeft = scrollLeft;
+        if (this.state.scrollLeft !== scrollLeft) {
             shouldUpdate = true;
         }
 
