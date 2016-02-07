@@ -45,7 +45,7 @@ export default class Block extends Component {
         grow: PropTypes.bool.isRequired,
         shrink: PropTypes.bool.isRequired,
         static: PropTypes.bool.isRequired,
-        style: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+        style: PropTypes.any // eslint-disable-line react/forbid-prop-types
     };
 
     render() {
