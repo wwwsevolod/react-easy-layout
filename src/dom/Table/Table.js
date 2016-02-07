@@ -245,6 +245,7 @@ export default class Table extends Component {
         if (this.props.header) {
             rows.push(this.props.header({
                 scrollTop: this.state.scrollTop,
+                scrollLeft: this.state.scrollLeft,
                 availHeight: this.state.availHeight,
                 viewportStart: this.state.viewportStart,
                 rowsCount: this.props.rowsCount,
@@ -263,6 +264,7 @@ export default class Table extends Component {
         for (var index = fromIndex; index < toIndex; index++) {// eslint-disable-line no-var
             rows.push(this.props.row({
                 scrollTop: this.state.scrollTop,
+                scrollLeft: this.state.scrollLeft,
                 availHeight: this.state.availHeight,
                 viewportStart: this.state.viewportStart,
                 rowsCount: this.props.rowsCount,
@@ -282,6 +284,7 @@ export default class Table extends Component {
         if (this.props.footer) {
             rows.push(this.props.footer({
                 scrollTop: this.state.scrollTop,
+                scrollLeft: this.state.scrollLeft,
                 availHeight: this.state.availHeight,
                 viewportStart: this.state.viewportStart,
                 rowsCount: this.props.rowsCount,
