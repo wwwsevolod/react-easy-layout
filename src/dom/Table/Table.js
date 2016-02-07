@@ -20,6 +20,15 @@ function defaultScrollTopGetter(tableNode, node) {
     return node.scrollTop;
 }
 
+function defaultScrollLeftGetter(tableNode, node) {
+    if (node === document.body || node === document.documentElement || node === document) {
+        return document.body.scrollLeft || document.documentElement.scrollLeft;
+    }
+
+    return node.scrollLeft;
+}
+
+
 function defaultTableViewportStartGetter(tableNode, nodeWithScroll) {
     return tableNode.offsetTop;
 }
@@ -30,14 +39,14 @@ function defaultTableMaxViewportGetter(tableNode, nodeWithScroll) {
 
 function defaultGetCurrentFirstRowIndex({scrollTop, availHeight, viewportStart, rowHeight, rowsCount}) {
     const start = Math.floor(Math.max(0, scrollTop - viewportStart) / rowHeight);
-    const preload = availHeight / rowHeight;
+    const preload = (availHeight / rowHeight) / 2;
 
     return Math.max(0, Math.floor(start - preload));
 }
 
 function defaultGetCurrentLastRowIndex({scrollTop, availHeight, viewportStart, rowHeight, rowsCount}) {
     const end = Math.floor(Math.max(0, (scrollTop - viewportStart) + availHeight) / rowHeight);
-    const preload = availHeight / rowHeight;
+    const preload = (availHeight / rowHeight) / 2;
 
     return Math.min(rowsCount, Math.floor(end + preload));
 }
@@ -93,6 +102,7 @@ export default class Table extends Component {
         getCurrentLastRowIndex: defaultGetCurrentLastRowIndex,
         parentWithScrollGetter: defaultParentWithScrollGetter,
         scrollTopGetter: defaultScrollTopGetter,
+        scrollLeftGetter: defaultScrollLeftGetter,
         tableViewportStartGetter: defaultTableViewportStartGetter,
         tableMaxViewportGetter: defaultTableMaxViewportGetter,
 
@@ -108,6 +118,7 @@ export default class Table extends Component {
         toIndex: 0,
         fromIndex: 0,
         scrollTop: 0,
+        scrollLeft: 0,
         availHeight: 0,
         viewportStart: 0
     };
