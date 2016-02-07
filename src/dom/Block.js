@@ -44,7 +44,8 @@ export default class Block extends Component {
         alignSelf: selfAlignPropType.isRequired,
         grow: PropTypes.bool.isRequired,
         shrink: PropTypes.bool.isRequired,
-        static: PropTypes.bool.isRequired
+        static: PropTypes.bool.isRequired,
+        style: PropTypes.any, // eslint-disable-line react/forbid-prop-types
     };
 
     render() {
@@ -58,7 +59,7 @@ export default class Block extends Component {
             height = `${height}px`;
         }
 
-        const styles = {};
+        const styles = Object.assign({}, this.props.style || {});
 
         if (width) {
             styles.width = width;

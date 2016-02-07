@@ -24,6 +24,7 @@ export default class Row extends Component {
             shrink={this.props.shrink}
             static={this.props.static}
             isRowWrapper={this.props.fix}
+            style={this.props.style}
         >
             <Box
                 type={this.props.reverse ? Box.TYPE_ROW_REVERSE : Box.TYPE_ROW}
@@ -62,6 +63,8 @@ export default class Row extends Component {
         height: PropTypes.string.isRequired,
         fix: PropTypes.bool.isRequired,
         wrap: PropTypes.string.isRequired,
+
+        style: PropTypes.any, // eslint-disable-line react/forbid-prop-types
 
         // Wrapper Block props
         size: PropTypes.string.isRequired,
