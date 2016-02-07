@@ -16,6 +16,7 @@ import {
 export default class Column extends Component {
     render() {
         return <Block
+            width={this.props.width}
             height={this.props.height}
             size={this.props.size}
             alignSelf={this.props.alignSelf}
