@@ -14,34 +14,6 @@ import {
 } from '../constants';
 
 export default class Row extends Component {
-    render() {
-        return <Block
-            width={this.props.width}
-            height={this.props.height}
-            size={this.props.size}
-            alignSelf={this.props.alignSelf}
-            className={this.props.className}
-            grow={this.props.grow}
-            shrink={this.props.shrink}
-            static={this.props.static}
-            isRowWrapper={this.props.fix}
-            style={this.props.style}
-        >
-            <Box
-                type={this.props.reverse ? Box.TYPE_ROW_REVERSE : Box.TYPE_ROW}
-                wrap={this.props.wrap}
-                align={this.props.align}
-                justify={this.props.justify}
-                content={this.props.content}
-                fix={this.props.fix}
-                width={this.props.width}
-                height={this.props.height}
-            >
-                {this.props.children}
-            </Box>
-        </Block>;
-    }
-
     static SPACE_BETWEEN = Box.SPACE_BETWEEN;
     static SPACE_AROUND = Box.SPACE_AROUND;
     static CENTER = Box.CENTER;
@@ -61,7 +33,10 @@ export default class Row extends Component {
         justify: justifyPropType,
         reverse: PropTypes.bool.isRequired,
         width: PropTypes.string.isRequired,
-        height: PropTypes.string.isRequired,
+        height: PropTypes.oneOfType([
+            PropTypes.string.isRequired,
+            PropTypes.number.isRequired
+        ]),
         fix: PropTypes.bool.isRequired,
         wrap: PropTypes.string.isRequired,
 
@@ -91,4 +66,32 @@ export default class Row extends Component {
         shrink: true,
         static: false
     };
+
+    render() {
+        return <Block
+            width={this.props.width}
+            height={this.props.height}
+            size={this.props.size}
+            alignSelf={this.props.alignSelf}
+            className={this.props.className}
+            grow={this.props.grow}
+            shrink={this.props.shrink}
+            static={this.props.static}
+            isRowWrapper={this.props.fix}
+            style={this.props.style}
+        >
+            <Box
+                type={this.props.reverse ? Box.TYPE_ROW_REVERSE : Box.TYPE_ROW}
+                wrap={this.props.wrap}
+                align={this.props.align}
+                justify={this.props.justify}
+                content={this.props.content}
+                fix={this.props.fix}
+                width={this.props.width}
+                height={this.props.height}
+            >
+                {this.props.children}
+            </Box>
+        </Block>;
+    }
 }

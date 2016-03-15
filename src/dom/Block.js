@@ -39,8 +39,14 @@ export default class Block extends Component {
     static propTypes = {
         isRowWrapper: PropTypes.bool.isRequired,
         size: PropTypes.string.isRequired,
-        width: PropTypes.string.isRequired,
-        height: PropTypes.string.isRequired,
+        width: PropTypes.oneOfType([
+            PropTypes.string.isRequired,
+            PropTypes.number.isRequired
+        ]),
+        height: PropTypes.oneOfType([
+            PropTypes.string.isRequired,
+            PropTypes.number.isRequired
+        ]),
         alignSelf: selfAlignPropType.isRequired,
         grow: PropTypes.bool.isRequired,
         shrink: PropTypes.bool.isRequired,
@@ -49,15 +55,7 @@ export default class Block extends Component {
     };
 
     render() {
-        let width = this.props.width;
-        if (width && parseInt(width, 10).toString() === width) {
-            width = `${width}px`;
-        }
-
-        let height = this.props.height;
-        if (height && parseInt(height, 10).toString() === height) {
-            height = `${height}px`;
-        }
+        const {height, width} = this.props;
 
         const styles = Object.assign({}, this.props.style || {});
 

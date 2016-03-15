@@ -67,7 +67,10 @@ export default class Box extends Component {
         justify: justifyPropType.isRequired,
 
         width: PropTypes.string.isRequired,
-        height: PropTypes.string.isRequired,
+        height: PropTypes.oneOfType([
+            PropTypes.string.isRequired,
+            PropTypes.number.isRequired
+        ]),
         fix: PropTypes.bool.isRequired,
         type: PropTypes.string.isRequired,
         wrap: PropTypes.string.isRequired

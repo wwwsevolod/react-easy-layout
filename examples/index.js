@@ -1,10 +1,116 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Column, Block, Row} from '../src';
-import {Cell, Table} from '../src/dom-table';
+import {InfiniteScrollView} from '../src/dom-infinite-scroll-view';
+import {Table} from '../src/dom-table';
 import 'normalize.css';
 import '../src/dom/easy-layout.css';
 import './index.css';
+
+function MyRow({
+    index,
+    height
+}) {
+    return <Row
+        key={'row' + index}
+        height={height}
+    >
+        <Block static={true} width="100px">
+            id: {index}
+        </Block>
+        <Block static={true} width="200px">
+            count: {Math.floor(index * 1000)}
+        </Block>
+        <Block static={true} width="100px">
+            asd: {index + 100500}
+        </Block>
+        <Block>
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Block>
+        <Block static={true} width="100px">
+            id: {index}
+        </Block>
+        <Block static={true} width="200px">
+            count: {Math.floor(index * 1000)}
+        </Block>
+        <Block static={true} width="100px">
+            asd: {index + 100500}
+        </Block>
+        <Block>
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Block>
+    </Row>;
+}
+
+function Header() {
+    return <Row>
+        <Block>
+            Header
+        </Block>
+    </Row>;
+}
+
+function Footer() {
+    return <Row>
+        <Block>
+            Footer
+        </Block>
+    </Row>;
+}
+
+function TableHeader({height}) {
+    return <Table.Row height={height}>
+        <Table.Cell field="field1">
+            Head1
+        </Table.Cell>
+        <Table.Cell field="field2">
+            Head2
+        </Table.Cell>
+        <Table.Cell field="field3">
+            Head3
+        </Table.Cell>
+        <Table.Cell field="field4">
+            Head4
+        </Table.Cell>
+    </Table.Row>;
+}
+
+function TableFooter({height}) {
+    return <Table.Row height={height}>
+        <Table.Cell field="field2">
+            Foot2
+        </Table.Cell>
+        <Table.Cell field="field3">
+            Foot3
+        </Table.Cell>
+        <Table.Cell field="field4">
+            Foot4
+        </Table.Cell>
+    </Table.Row>;
+}
+
+function TableMyRow({
+    index,
+    height
+}) {
+    return <Table.Row
+        key={'row' + index}
+        height={height}
+    >
+        <Table.Cell field="field1">
+            id: {index}
+        </Table.Cell>
+        <Table.Cell field="field2">
+            count: {Math.floor(index * 1000)}
+        </Table.Cell>
+        <Table.Cell field="field3">
+            asd: {index + 100500}
+        </Table.Cell>
+        <Table.Cell field="field4">
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Table.Cell>
+    </Table.Row>;
+}
 
 render(
     <div className="App">
@@ -99,97 +205,29 @@ render(
         <div className="TableExample">
             <Table
                 rowHeight={30}
+                rowsCount={1000}
+                columnWidths={{
+                    field1: 100,
+                    field2: 300,
+                    field3: 100,
+                    field4: 150
+                }}
+                columns={['field1', 'field4', 'field3', 'field2']}
+            >
+                <TableHeader key="header" />
+                <TableMyRow />
+                <TableFooter key="footer" />
+            </Table>
+        </div>
+        <div className="InfiniteScrollExample">
+            <InfiniteScrollView
+                rowHeight={30}
                 rowsCount={10000}
-                rowClassNameGetter={(index) => index % 2 ? 'odd' : 'even'}
-
-                header={() => <Table.Row
-                    key="__header__"
-                >
-                    <Table.Cell static={true} width="100px">
-                        ID
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        ID1
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        ID2
-                    </Table.Cell>
-                    <Table.Cell>
-                        ID3
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        ID
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        ID1
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        ID2
-                    </Table.Cell>
-                    <Table.Cell>
-                        ID3
-                    </Table.Cell>
-                </Table.Row>}
-
-                row={({rowIndex}) => <Table.Row
-                    key={'row' + rowIndex}
-                    height="30px"
-                >
-                    <Table.Cell static={true} width="100px">
-                        id: {rowIndex}
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        count: {Math.floor(rowIndex * 1000)}
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        asd: {rowIndex + 100500}
-                    </Table.Cell>
-                    <Table.Cell>
-                        isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        id: {rowIndex}
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        count: {Math.floor(rowIndex * 1000)}
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        asd: {rowIndex + 100500}
-                    </Table.Cell>
-                    <Table.Cell>
-                        isOdd: {rowIndex % 2 !== 0 ? 'true' : 'false'}
-                    </Table.Cell>
-                </Table.Row>}
-
-                footer={() => <Table.Row
-                    key="__footer__"
-                >
-                    <Table.Cell static={true} width="100px">
-                        footer
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        footer1
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        footer2
-                    </Table.Cell>
-                    <Table.Cell>
-                        footer3
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        footer
-                    </Table.Cell>
-                    <Table.Cell static={true} width="200px">
-                        footer1
-                    </Table.Cell>
-                    <Table.Cell static={true} width="100px">
-                        footer2
-                    </Table.Cell>
-                    <Table.Cell>
-                        footer3
-                    </Table.Cell>
-                </Table.Row>}
-            />
+            >  
+                <Header key="header" />
+                <MyRow />
+                <Footer key="footer" />
+            </InfiniteScrollView>
         </div>
     </div>,
     document.querySelector('#app')
