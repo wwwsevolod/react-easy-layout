@@ -1,6 +1,6 @@
 {
   "name": "react-easy-layout",
-  "version": "0.8.6",
+  "version": "0.9.0",
   "description": "Advanced react layout library that easy to use",
   "main": "lib/index.js",
   "scripts": {
