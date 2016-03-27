@@ -246,7 +246,7 @@ export default class InfiniteScrollView extends Component {
     componentWillReceiveProps(nextProps) {
         const infiniteScrollView = findDOMNode(this.refs.infiniteScrollView);
         if (nextProps.parentWithScrollGetter(infiniteScrollView) !== this.nodeWithScroll) {
-            this.clearScrollListener();ƒ
+            this.clearScrollListener();
             this.setUpScrollListener(nextProps);
         }
     }
