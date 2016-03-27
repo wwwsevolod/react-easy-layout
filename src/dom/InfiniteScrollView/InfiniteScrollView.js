@@ -116,9 +116,9 @@ export default class InfiniteScrollView extends Component {
 
         this.frameId = animationFrame.request(() => {
             this.frameId = animationFrame.request(() => {
-                // this.frameId = animationFrame.request(() => {
+                this.frameId = animationFrame.request(() => {
                     this.updateScrollState(this.props);
-                // });
+                });
             });
         });
     };
