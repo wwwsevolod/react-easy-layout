@@ -324,6 +324,7 @@ export default class InfiniteScrollView extends Component {
                     viewportStart: this.state.viewportStart,
                     rowsCount: this.props.rowsCount,
                     height: this.props.rowHeight,
+                    defaultHeight: this.props.rowHeight,
                     fromIndex,
                     toIndex
                 }
@@ -370,7 +371,8 @@ export default class InfiniteScrollView extends Component {
                         fromIndex,
                         toIndex,
                         primaryKey,
-                        key: primaryKey
+                        key: primaryKey,
+                        defaultHeight: this.props.rowHeight
                     }
                 )));
             }
@@ -395,7 +397,8 @@ export default class InfiniteScrollView extends Component {
                     rowsCount: this.props.rowsCount,
                     height: this.props.rowHeight,
                     fromIndex,
-                    toIndex
+                    toIndex,
+                    defaultHeight: this.props.rowHeight
                 }
             )));
         }
