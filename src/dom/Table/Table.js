@@ -16,10 +16,10 @@ export default class Table extends Component {
     static Row = TableRow;
     static Cell = TableCell;
 
-    static propTypes = Object.assign({
+    static propTypes = {
         columnWidths: PropTypes.objectOf(PropTypes.number).isRequired,
         columns: PropTypes.arrayOf(PropTypes.string)
-    }, InfiniteScrollView.propTypes);
+    };
 
     static childContextTypes = {
         tableColumns: PropTypes.arrayOf(PropTypes.string),

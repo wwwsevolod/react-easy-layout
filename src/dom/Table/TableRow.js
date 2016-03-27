@@ -13,6 +13,7 @@ export default class TableRow extends Component {
 
     static propTypes = {
         height: PropTypes.number.isRequired,
+        index: PropTypes.number.isRequired,
         children(props) {
             let children = Children.toArray(props.children);
 
@@ -30,7 +31,8 @@ export default class TableRow extends Component {
                 {}, 
                 child.props,
                 {
-                    width: this.context.tableCellWidths[child.props.field] || 0
+                    width: this.context.tableCellWidths[child.props.field] || 0,
+                    index: this.props.index
                 }
             )));
         }
@@ -64,7 +66,8 @@ export default class TableRow extends Component {
             }
 
             return cloneElement(child, Object.assign({}, child.props, {
-                width
+                width,
+                index: this.props.index
             }));
         });
     }

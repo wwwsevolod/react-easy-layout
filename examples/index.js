@@ -59,7 +59,7 @@ function Footer() {
 }
 
 function TableHeader({height}) {
-    return <Table.Row height={height}>
+    return <Table.Row index={-1} height={height}>
         <Table.Cell field="field1">
             Head1
         </Table.Cell>
@@ -76,15 +76,12 @@ function TableHeader({height}) {
 }
 
 function TableFooter({height}) {
-    return <Table.Row height={height}>
+    return <Table.Row index={-2} height={height}>
         <Table.Cell field="field2">
             Foot2
         </Table.Cell>
         <Table.Cell field="field3">
             Foot3
-        </Table.Cell>
-        <Table.Cell field="field4">
-            Foot4
         </Table.Cell>
     </Table.Row>;
 }
@@ -96,6 +93,7 @@ function TableMyRow({
     return <Table.Row
         key={'row' + index}
         height={height}
+        index={index}
     >
         <Table.Cell field="field1">
             id: {index}
@@ -203,9 +201,9 @@ render(
             </Row>
         </div>
         <div className="TableExample">
-            <Table
+            {/*<Table
                 rowHeight={30}
-                rowsCount={1000}
+                rowsCount={100}
                 columnWidths={{
                     field1: 100,
                     field2: 300,
@@ -217,12 +215,26 @@ render(
                 <TableHeader key="header" />
                 <TableMyRow />
                 <TableFooter key="footer" />
-            </Table>
+            </Table>*/}
         </div>
         <div className="InfiniteScrollExample">
             <InfiniteScrollView
                 rowHeight={30}
-                rowsCount={10000}
+                rowsCount={1000}
+                customRowsHeights={[
+                    {
+                        index: 10,
+                        height: 100
+                    },
+                    {
+                        index: 1,
+                        height: 50
+                    },
+                    {
+                        index: 100,
+                        height: 150
+                    }
+                ]}
             >  
                 <Header key="header" />
                 <MyRow />
