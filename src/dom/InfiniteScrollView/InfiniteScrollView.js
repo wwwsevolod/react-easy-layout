@@ -222,6 +222,9 @@ export default class InfiniteScrollView extends Component {
 
                 newState.additionalHeightFakeBottom = diffHeight;
             }
+        } else {
+            newState.additionalHeightFakeTop = 0;
+            newState.additionalHeightFakeBottom = 0;
         }
 
         newState.fromIndex = fromIndex;
