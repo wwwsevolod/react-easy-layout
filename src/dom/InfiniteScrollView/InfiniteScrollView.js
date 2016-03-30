@@ -74,6 +74,7 @@ export default class InfiniteScrollView extends Component {
         })),
 
         stateCallback: PropTypes.func,
+        beforeStateChangeCallback: PropTypes.func,
 
         parentWithScrollGetter: PropTypes.func.isRequired,
         scrollTopGetter: PropTypes.func.isRequired,
@@ -241,6 +242,10 @@ export default class InfiniteScrollView extends Component {
         newState.scrollLeft = scrollLeft;
         if (this.state.scrollLeft !== scrollLeft) {
             shouldUpdate = true;
+        }
+
+        if (this.props.beforeStateChangeCallback) {
+            this.props.beforeStateChangeCallback();
         }
 
         // if (shouldUpdate) {
