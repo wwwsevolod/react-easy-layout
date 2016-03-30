@@ -43,7 +43,7 @@ function defaultGetCurrentFirstRowIndex({
     rowsCount
 }) {
     const start = Math.floor(Math.max(0, scrollTop - viewportStart) / rowHeight);
-    const preload = (availHeight / rowHeight);
+    const preload = 10;//(availHeight / rowHeight);
 
     return Math.max(0, Math.floor(start - preload));
 }
@@ -56,7 +56,7 @@ function defaultGetCurrentLastRowIndex({
     rowsCount
 }) {
     const end = Math.floor(Math.max(0, (scrollTop - viewportStart) + availHeight) / rowHeight);
-    const preload = (availHeight / rowHeight);
+    const preload = 10;//(availHeight / rowHeight);
 
     return Math.min(rowsCount, Math.floor(end + preload));
 }
