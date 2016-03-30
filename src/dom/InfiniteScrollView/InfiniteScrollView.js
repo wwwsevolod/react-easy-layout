@@ -73,6 +73,8 @@ export default class InfiniteScrollView extends Component {
             height: PropTypes.number
         })),
 
+        stateCallback: PropTypes.func,
+
         parentWithScrollGetter: PropTypes.func.isRequired,
         scrollTopGetter: PropTypes.func.isRequired,
         viewportStartGetter: PropTypes.func.isRequired,
@@ -242,7 +244,11 @@ export default class InfiniteScrollView extends Component {
         }
 
         // if (shouldUpdate) {
-            this.setState(newState);
+            if (this.props.stateCallback) {
+                this.setState(newState, this.props.stateCallback);
+            } else {
+                this.setState(newState);
+            }
         // }
     }
 
@@ -364,15 +370,11 @@ export default class InfiniteScrollView extends Component {
                     {},
                     rowChildren.props,
                     {
-                        scrollTop: this.state.scrollTop,
-                        scrollLeft: this.state.scrollLeft,
                         availHeight: this.state.availHeight,
                         viewportStart: this.state.viewportStart,
                         rowsCount: this.props.rowsCount,
                         height,
                         index,
-                        fromIndex,
-                        toIndex,
                         primaryKey,
                         key: primaryKey,
                         defaultHeight: this.props.rowHeight
