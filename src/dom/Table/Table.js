@@ -10,7 +10,7 @@ function TableCell(props) {
     return <div style={{
         height: '100%',
         width: props.width,
-        float: 'left'
+        display: 'table-cell'
     }}>
         {props.children}
     </div>;
