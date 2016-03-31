@@ -417,12 +417,10 @@ export default class InfiniteScrollView extends Component {
     }
 
     render() {
-        return <Column
+        return <div
             ref="infiniteScrollView"
-            wrap={Column.NOWRAP}
-            fix={false}
         >
             {this.renderRows()}
-        </Column>;
+        </div>;
     }
 }

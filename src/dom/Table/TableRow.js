@@ -73,8 +73,8 @@ export default class TableRow extends Component {
     }
 
     render() {
-        return <Row height={this.props.height} fix={false} wrap={Row.NOWRAP}>
+        return <div style={{height: this.props.height}}>
             {this.renderColumns()}
-        </Row>;
+        </div>;
     }
 }
