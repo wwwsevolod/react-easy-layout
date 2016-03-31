@@ -75,6 +75,7 @@ export default class TableRow extends Component {
     render() {
         return <div style={{height: this.props.height}}>
             {this.renderColumns()}
+            <div style={{clear: 'both'}} />
         </div>;
     }
 }

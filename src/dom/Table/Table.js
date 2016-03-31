@@ -7,10 +7,18 @@ import Block from '../Block';
 const block = bem('Table');
 
 function TableCell(props) {
-    return <Block {...props} static={true}>
+    return <div style={{
+        height: '100%',
+        width: props.width,
+        float: 'left'
+    }}>
         {props.children}
-    </Block>;
+    </div>;
 }
+
+TableCell.propTypes = {
+    width: PropTypes.any // eslint-disable-line react/forbid-prop-types
+};
 
 export default class Table extends Component {
     static Row = TableRow;
