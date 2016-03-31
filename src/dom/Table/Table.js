@@ -7,13 +7,9 @@ import Block from '../Block';
 const block = bem('Table');
 
 function TableCell(props) {
-    return <div style={{
-        height: '100%',
-        width: props.width,
-        display: 'table-cell'
-    }}>
+    return <Block {...props} static={true}>
         {props.children}
-    </div>;
+    </Block>;
 }
 
 TableCell.propTypes = {

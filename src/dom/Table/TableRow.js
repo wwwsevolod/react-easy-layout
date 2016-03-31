@@ -1,7 +1,7 @@
 import {InfiniteScrollView} from '../InfiniteScrollView';
 import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import bem from '../bem';
-import Row from '../Row';
+import Box from '../Box';
 
 const block = bem('TableRow');
 
@@ -73,9 +73,8 @@ export default class TableRow extends Component {
     }
 
     render() {
-        return <div style={{height: this.props.height}}>
+        return <Box type={Box.TYPE_ROW} height={this.props.height} fix={false} wrap={Box.NOWRAP}>
             {this.renderColumns()}
-            <div style={{clear: 'both'}} />
-        </div>;
+        </Box>;
     }
 }
