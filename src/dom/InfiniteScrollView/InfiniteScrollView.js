@@ -208,6 +208,8 @@ export default class InfiniteScrollView extends Component {
                 // );
 
                 // toIndex -= indexDiff;
+            } else {
+                newState.additionalHeightFakeTop = 0;
             }
 
             if (lifted > 0) {
@@ -224,6 +226,8 @@ export default class InfiniteScrollView extends Component {
                 const diffHeight = downliftedHeightSum - downlifted * this.props.rowHeight;
 
                 newState.additionalHeightFakeBottom = diffHeight;
+            } else {
+                newState.additionalHeightFakeBottom = 0;
             }
         } else {
             newState.additionalHeightFakeTop = 0;
