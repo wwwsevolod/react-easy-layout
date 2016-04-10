@@ -3,12 +3,9 @@ div, body, html {
     padding: 0;
 }
 
-body {
-    padding: 10px;
-}
-
 .App {
-
+    // height: 100vh;
+    // overflow: auto;
 }
 
 .RowExample {

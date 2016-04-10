@@ -1,10 +1,8 @@
 import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 import bem from '../bem';
-import AnimationFrame from 'animation-frame';
 import Column from '../Column';
 
-const animationFrame = new AnimationFrame();
 
 function defaultParentWithScrollGetter(viewNode) {
     return document;
@@ -43,7 +41,7 @@ function defaultGetCurrentFirstRowIndex({
     rowsCount
 }) {
     const start = Math.floor(Math.max(0, scrollTop - viewportStart) / rowHeight);
-    const preload = (availHeight / rowHeight) / 2;
+    const preload = 2;// (availHeight / rowHeight);
 
     return Math.max(0, Math.floor(start - preload));
 }
@@ -56,7 +54,7 @@ function defaultGetCurrentLastRowIndex({
     rowsCount
 }) {
     const end = Math.floor(Math.max(0, (scrollTop - viewportStart) + availHeight) / rowHeight);
-    const preload = (availHeight / rowHeight) / 2;
+    const preload = 2;// (availHeight / rowHeight);
 
     return Math.min(rowsCount, Math.floor(end + preload));
 }
@@ -103,33 +101,29 @@ export default class InfiniteScrollView extends Component {
     state = {
         toIndex: 0,
         fromIndex: 0,
+
         scrollTop: 0,
         scrollLeft: 0,
         availHeight: 0,
         viewportStart: 0,
 
+        totalHeightStyle: {height: '0px'},
         additionalHeightFakeTop: 0,
         additionalHeightFakeBottom: 0
     };
 
     scrollListener = (event) => {
-        if (this.frameId) {
-            animationFrame.cancel(this.frameId);
-        }
-
-        this.frameId = animationFrame.request(() => {
-            this.frameId = animationFrame.request(() => {
-                this.frameId = animationFrame.request(() => {
-                    this.updateScrollState(this.props);
-                });
-            });
-        });
+        this.updateScrollState(this.props);
     };
 
     updateScrollState(props) {
         if (!this.nodeWithScroll) {
             return;
         }
+        if (!this.refs.infiniteScrollView) {
+            return;
+        }
+
         const infiniteScrollView = findDOMNode(this.refs.infiniteScrollView);
 
         const scrollTop = props.scrollTopGetter(infiniteScrollView, this.nodeWithScroll);
@@ -137,23 +131,13 @@ export default class InfiniteScrollView extends Component {
         const availHeight = props.maxViewportGetter(infiniteScrollView, this.nodeWithScroll);
         const viewportStart = props.viewportStartGetter(infiniteScrollView, this.nodeWithScroll);
 
-        let shouldUpdate = false;
         const newState = {};
 
         newState.scrollTop = scrollTop;
-        if (scrollTop !== this.state.scrollTop) {
-            shouldUpdate = true;
-        }
 
         newState.availHeight = availHeight;
-        if (availHeight !== this.state.availHeight) {
-            shouldUpdate = true;
-        }
 
         newState.viewportStart = viewportStart;
-        if (viewportStart !== this.state.viewportStart) {
-            shouldUpdate = true;
-        }
 
         let fromIndex = this.props.getCurrentFirstRowIndex({
             scrollTop: scrollTop,
@@ -171,6 +155,8 @@ export default class InfiniteScrollView extends Component {
             rowHeight: this.props.rowHeight
         });
 
+        let totalHeight = this.props.rowsCount * this.props.rowHeight;
+
         if (this.props.customRowsHeights) {
             let uplifted = 0;
             let upliftedHeightSum = 0;
@@ -182,10 +168,12 @@ export default class InfiniteScrollView extends Component {
             let downliftedHeightSum = 0;
 
             this.props.customRowsHeights.forEach((item) => {
+                totalHeight = (totalHeight + item.height) - this.props.rowHeight;
+
                 if (item.index < fromIndex) {
                     uplifted++;
                     upliftedHeightSum += item.height;
-                } else if (item.index >= fromIndex && item.index < toIndex) {
+                } else if (item.index >= fromIndex && item.index <= toIndex) {
                     lifted++;
                     liftedHeightSum += item.height;
                 } else if (item.index > toIndex) {
@@ -198,28 +186,12 @@ export default class InfiniteScrollView extends Component {
                 const diffHeight = upliftedHeightSum - uplifted * this.props.rowHeight;
 
                 newState.additionalHeightFakeTop = diffHeight;
-
-                // const indexDiff = fromIndex - Math.floor(diffHeight / this.props.rowHeight);
-
-
-                // fromIndex = Math.max(
-                //     indexDiff,
-                //     0
-                // );
-
-                // toIndex -= indexDiff;
             } else {
                 newState.additionalHeightFakeTop = 0;
             }
 
             if (lifted > 0) {
-                // const diffHeight = liftedHeightSum - lifted * this.props.rowHeight;
 
-
-                // toIndex = Math.max(
-                //     (toIndex - Math.floor(diffHeight / this.props.rowHeight)),
-                //     this.props.rowsCount
-                // );
             }
 
             if (downlifted > 0) {
@@ -234,34 +206,34 @@ export default class InfiniteScrollView extends Component {
             newState.additionalHeightFakeBottom = 0;
         }
 
+        if (this.state.totalHeightStyle.height !== `${totalHeight}px`) {
+            newState.totalHeightStyle = {
+                height: `${totalHeight}px`
+            };
+        }
+
         newState.fromIndex = fromIndex;
         newState.toIndex = toIndex;
 
-        if (toIndex === this.state.toIndex && fromIndex === this.state.fromIndex) {
-            shouldUpdate = false;
-        } else {
-            shouldUpdate = true;
-        }
-
         newState.scrollLeft = scrollLeft;
-        if (this.state.scrollLeft !== scrollLeft) {
-            shouldUpdate = true;
-        }
 
         if (this.props.beforeStateChangeCallback) {
             this.props.beforeStateChangeCallback();
         }
 
-        // if (shouldUpdate) {
-            if (this.props.stateCallback) {
-                this.setState(newState, this.props.stateCallback);
-            } else {
-                this.setState(newState);
-            }
-        // }
+        const started = performance.now();
+
+        if (this.props.stateCallback) {
+            this.setState(newState, this.props.stateCallback);
+        } else {
+            this.setState(newState, () => console.log('render perf', performance.now() - started));
+        }
     }
 
     componentWillReceiveProps(nextProps) {
+        if (!this.refs.infiniteScrollView) {
+            return;
+        }
         const infiniteScrollView = findDOMNode(this.refs.infiniteScrollView);
         if (nextProps.parentWithScrollGetter(infiniteScrollView) !== this.nodeWithScroll) {
             this.clearScrollListener();
@@ -270,6 +242,9 @@ export default class InfiniteScrollView extends Component {
     }
 
     setUpScrollListener(props) {
+        if (!this.refs.infiniteScrollView) {
+            return;
+        }
         this.nodeWithScroll = props.parentWithScrollGetter(findDOMNode(this.refs.infiniteScrollView));
 
         if (!this.nodeWithScroll) {
@@ -324,15 +299,37 @@ export default class InfiniteScrollView extends Component {
         return result;
     }
 
-    renderRows() {
-        const {fromIndex, toIndex} = this.state;
+    asd = {};
 
+    getRowElement(rowChildren, height, index, primaryKey) {
+        return cloneElement(rowChildren, Object.assign(
+            {},
+            rowChildren.props,
+            {
+                availHeight: this.state.availHeight,
+                viewportStart: this.state.viewportStart,
+                rowsCount: this.props.rowsCount,
+                height,
+                index,
+                primaryKey,
+                key: primaryKey,
+                defaultHeight: this.props.rowHeight
+            }
+        ));
+    }
+
+    renderRows() {
+        const started = performance.now();
+
+        const {fromIndex, toIndex, additionalHeightFakeTop} = this.state;
+
+        const allRows = [];
         const rows = [];
 
         const {headerChildren, rowChildren, footerChildren} = this.getChildren();
 
         if (headerChildren) {
-            rows.push(cloneElement(headerChildren, Object.assign(
+            allRows.push(cloneElement(headerChildren, Object.assign(
                 {},
                 headerChildren.props,
                 {
@@ -349,16 +346,7 @@ export default class InfiniteScrollView extends Component {
             )));
         }
 
-        const fakeTopCellHeightSize = fromIndex * this.props.rowHeight + this.state.additionalHeightFakeTop;
-        const fakeBottomCellHeightSize = Math.max(0, this.props.rowsCount - toIndex) * this.props.rowHeight
-            + this.state.additionalHeightFakeBottom;
-
-        if (fakeTopCellHeightSize && rowChildren) {
-            rows.push(<div
-                key="__fake-top__"
-                style={{height: fakeTopCellHeightSize}}
-            ></div>);
-        }
+        const fakeTopCellHeightSize = fromIndex * this.props.rowHeight + additionalHeightFakeTop;
 
         let customHeights = {};
 
@@ -375,32 +363,20 @@ export default class InfiniteScrollView extends Component {
 
                 const height = index in customHeights ? customHeights[index] : this.props.rowHeight;
 
-                rows.push(cloneElement(rowChildren, Object.assign(
-                    {},
-                    rowChildren.props,
-                    {
-                        availHeight: this.state.availHeight,
-                        viewportStart: this.state.viewportStart,
-                        rowsCount: this.props.rowsCount,
-                        height,
-                        index,
-                        primaryKey,
-                        key: primaryKey,
-                        defaultHeight: this.props.rowHeight
-                    }
-                )));
+                rows.push(this.getRowElement(rowChildren, height, index, primaryKey));
             }
+
+            allRows.push(<div style={this.state.totalHeightStyle} key="__real-rows__" ref="infiniteScrollView">
+                <div style={{transform: `translateY(${fakeTopCellHeightSize}px)`}}>
+                    {rows}
+                </div>
+            </div>);
         }
 
-        if (fakeBottomCellHeightSize && rowChildren) {
-            rows.push(<div
-                key="__fake-bottom__"
-                style={{height: fakeBottomCellHeightSize}}
-            ></div>);
-        }
+
 
         if (footerChildren) {
-            rows.push(cloneElement(footerChildren, Object.assign(
+            allRows.push(cloneElement(footerChildren, Object.assign(
                 {},
                 footerChildren.props,
                 {
@@ -417,13 +393,13 @@ export default class InfiniteScrollView extends Component {
             )));
         }
 
-        return rows;
+        console.log('perf', performance.now() - started);
+
+        return allRows;
     }
 
     render() {
-        return <div
-            ref="infiniteScrollView"
-        >
+        return <div>
             {this.renderRows()}
         </div>;
     }

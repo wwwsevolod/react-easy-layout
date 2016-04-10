@@ -201,9 +201,9 @@ render(
             </Row>
         </div>
         <div className="TableExample">
-            {/*<Table
+            <Table
                 rowHeight={30}
-                rowsCount={100}
+                rowsCount={100000}
                 columnWidths={{
                     field1: 100,
                     field2: 300,
@@ -215,12 +215,13 @@ render(
                 <TableHeader key="header" />
                 <TableMyRow />
                 <TableFooter key="footer" />
-            </Table>*/}
+            </Table>
         </div>
         <div className="InfiniteScrollExample">
-            <InfiniteScrollView
+            {/*<InfiniteScrollView
                 rowHeight={30}
                 rowsCount={1000}
+                parentWithScrollGetter={() => document.querySelector('.App')}
                 customRowsHeights={[
                     {
                         index: 10,
@@ -239,7 +240,7 @@ render(
                 <Header key="header" />
                 <MyRow />
                 <Footer key="footer" />
-            </InfiniteScrollView>
+            </InfiniteScrollView>*/}
         </div>
     </div>,
     document.querySelector('#app')
