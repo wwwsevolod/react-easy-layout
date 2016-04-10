@@ -221,12 +221,10 @@ export default class InfiniteScrollView extends Component {
             this.props.beforeStateChangeCallback();
         }
 
-        const started = performance.now();
-
         if (this.props.stateCallback) {
             this.setState(newState, this.props.stateCallback);
         } else {
-            this.setState(newState, () => console.log('render perf', performance.now() - started));
+            this.setState(newState);
         }
     }
 
@@ -319,8 +317,6 @@ export default class InfiniteScrollView extends Component {
     }
 
     renderRows() {
-        const started = performance.now();
-
         const {fromIndex, toIndex, additionalHeightFakeTop} = this.state;
 
         const allRows = [];
@@ -392,8 +388,6 @@ export default class InfiniteScrollView extends Component {
                 }
             )));
         }
-
-        console.log('perf', performance.now() - started);
 
         return allRows;
     }
