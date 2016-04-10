@@ -8,9 +8,9 @@ if (typeof global === 'undefined') {
     window.global = window;
 }
 
-chai.use(chaiEnzyme);
+chai.use(chaiEnzyme());
 
 global.TestUtils = TestUtils;
 global.React = React;
 global.expect = chai.expect;
-global.renderElement = (...args) => shallow(...args);
+global.renderElement = shallow;

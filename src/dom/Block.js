@@ -60,11 +60,11 @@ export default class Block extends Component {
         const styles = Object.assign({}, this.props.style || {});
 
         if (width) {
-            styles.width = width;
+            styles.width = typeof width === 'number' ? `${width}px` : width;
         }
 
         if (height) {
-            styles.height = height;
+            styles.height = typeof height === 'number' ? `${height}px` : height;
         }
 
         if (this.props.size) {

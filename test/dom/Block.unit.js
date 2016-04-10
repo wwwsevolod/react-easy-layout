@@ -4,9 +4,7 @@ describe('Block', () => {
     it('should render static if static provided', () => {
         const element = renderElement(<Block static={true} />);
 
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_static($|\s)/);
+        expect(element).to.have.className('easy-layout-Block_static');
     });
 
     it('should render static if static AND grow or shrink provided anyway', () => {
@@ -16,21 +14,12 @@ describe('Block', () => {
             shrink={true}
         />);
 
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_static($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_noGrow($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_noShrink($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).not.to.match(/(^|\s)easy-layout-Block_grow($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).not.to.match(/(^|\s)easy-layout-Block_shrink($|\s)/);
+        expect(element).to.have.className('easy-layout-Block_static');
+
+        expect(element).to.have.className('easy-layout-Block_noGrow');
+        expect(element).to.have.className('easy-layout-Block_noShrink');
+        expect(element).not.to.have.className('easy-layout-Block_grow');
+        expect(element).not.to.have.className('easy-layout-Block_shrink');
     });
 
     it('should grow and shrink if not static', () => {
@@ -40,52 +29,46 @@ describe('Block', () => {
             shrink={true}
         />);
 
-        expect(
-            element.props.className.toString()
-        ).not.to.match(/(^|\s)easy-layout-Block_static($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).not.to.match(/(^|\s)easy-layout-Block_noGrow($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).not.to.match(/(^|\s)easy-layout-Block_noShrink($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_grow($|\s)/);
-        expect(
-            element.props.className.toString()
-        ).to.match(/(^|\s)easy-layout-Block_shrink($|\s)/);
+        expect(element).not.to.have.className('easy-layout-Block_static');
+        expect(element).not.to.have.className('easy-layout-Block_noGrow');
+        expect(element).not.to.have.className('easy-layout-Block_noShrink');
+        expect(element).to.have.className('easy-layout-Block_grow');
+        expect(element).to.have.className('easy-layout-Block_shrink');
     });
 
     it('should set width and height in pixels', () => {
-        const element = renderElement(<Block width="100" height="2000"></Block>);
-        expect(element.props.style.width).to.equal('100px');
-        expect(element.props.style.height).to.equal('2000px');
+        const element = renderElement(<Block width={100} height={2000}></Block>);
+        expect(element).to.have.prop('style').deep.equal({
+            height: '2000px',
+            width: '100px'
+        });
     });
 
     it('should not set basis when no size is provided', () => {
         const element = renderElement(<Block></Block>);
-        expect(element.props.style.flexBasis).to.be.undefined;
+        expect(element).to.have.prop('style').not.to.have.property('flexBasis');
     });
 
     it('should set basis when size is provided', () => {
         const element = renderElement(<Block size="auto"></Block>);
-        expect(element.props.style.flexBasis).to.equals('auto');
+        expect(element).to.have.prop('style').to.have.property('flexBasis').equals('auto');
     });
 
     it('should not set width when no width is provided', () => {
         const element = renderElement(<Block></Block>);
-        expect(element.props.style.width).to.be.undefined;
+        expect(element).to.have.prop('style').not.to.have.property('width');
     });
 
     it('should set width when width is provided', () => {
         const element = renderElement(<Block width="100%"></Block>);
-        expect(element.props.style.width).to.equal('100%');
+        expect(element).to.have.prop('style').to.have.property('width').equals('100%');
     });
 
     it('should set width and height in unit that was set', () => {
         const element = renderElement(<Block width="100vh" height="2000%"></Block>);
-        expect(element.props.style.width).to.equal('100vh');
-        expect(element.props.style.height).to.equal('2000%');
+        expect(element).to.have.prop('style').deep.equal({
+            height: '2000%',
+            width: '100vh'
+        });
     });
 });
