@@ -203,7 +203,7 @@ render(
         <div className="TableExample">
             <Table
                 rowHeight={30}
-                rowsCount={100000}
+                rowsCount={100}
                 columnWidths={{
                     field1: 100,
                     field2: 300,
@@ -211,6 +211,24 @@ render(
                     field4: 150
                 }}
                 columns={['field1', 'field4', 'field3', 'field2']}
+                customRowsHeights={[
+                    {
+                        index: 10,
+                        height: 100
+                    },
+                    {
+                        index: 1,
+                        height: 50
+                    },
+                    {
+                        index: 74,
+                        height: 150
+                    },
+                    {
+                        index: 99,
+                        height: 150
+                    }
+                ]}
             >
                 <TableHeader key="header" />
                 <TableMyRow />
