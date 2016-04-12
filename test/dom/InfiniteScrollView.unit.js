@@ -329,9 +329,9 @@ describe('InfiniteScrollView', () => {
             <TestRow />
         </InfiniteScrollView>);
 
-        expect(element.find('.InfiniteScrollView__Offset')).to.have.style('transform').equals(`translateY(0px)`);
+        expect(element.find('.InfiniteScrollView__Offset')).to.have.style('transform').equals(`translateY(30px)`);
 
-        expect(element).to.contain(
+        expect(element).not.to.contain(
             TestRow({
                 index: 0,
                 height: 30
@@ -361,7 +361,7 @@ describe('InfiniteScrollView', () => {
             scrollTopGetter: () => 110
         });
 
-        expect(element.find('.InfiniteScrollView__Offset')).to.have.style('transform').equals(`translateY(80px)`);
+        expect(element.find('.InfiniteScrollView__Offset')).to.have.style('transform').equals(`translateY(110px)`);
 
         element.setProps({
             scrollTopGetter: () => 75
