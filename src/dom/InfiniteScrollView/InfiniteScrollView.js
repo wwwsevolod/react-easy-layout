@@ -133,9 +133,7 @@ export default class InfiniteScrollView extends Component {
                         toIndex = fromIndex + 1;
                     }
                 }
-            }
-
-            if (fromIndex !== -1 && toIndex === -1) {
+            } else if (toIndex === -1) {
                 colHeight += currentHeight;
 
                 if (colHeight >= availHeight || index + 1 === props.rowsCount) {

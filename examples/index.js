@@ -214,7 +214,7 @@ render(
                 customRowsHeights={[
                     {
                         index: 10,
-                        height: 100
+                        height: 500
                     },
                     {
                         index: 1,
