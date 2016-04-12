@@ -209,16 +209,6 @@ export default class InfiniteScrollView extends Component {
             };
         }
 
-        if (
-            !newState.totalHeightStyle
-            && offsetTop === this.state.offsetTop
-            && fromIndex === this.state.fromIndex
-            && toIndex === this.state.toIndex
-            && newState.scrollLeft === this.state.scrollLeft
-        ) {
-            return;
-        }
-
         newState.fromIndex = fromIndex;
         newState.toIndex = toIndex;
         newState.offsetTop = offsetTop;
