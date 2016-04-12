@@ -103,24 +103,7 @@ export default class InfiniteScrollView extends Component {
         this.frame = requestFrame(() => this.updateScrollState(this.props));
     };
 
-    getViewState(props, scrollTop, viewportStart, availHeight) {
-        const virtualScrollTop = Math.max(0, scrollTop - viewportStart);
-
-        if (!props.customRowsHeights || !props.customRowsHeights.length) {
-            const fromIndex = Math.max(0, Math.floor(virtualScrollTop / props.rowHeight) - PRELOAD);
-            const toIndex = Math.min(
-                props.rowsCount,
-                fromIndex + Math.floor(availHeight / props.rowHeight) + PRELOAD * 2
-            );
-
-            return {
-                fromIndex,
-                toIndex,
-                offsetTop: fromIndex * props.rowHeight,
-                height: props.rowsCount * props.rowHeight
-            };
-        }
-
+    getViewStateWithCustomHeights(props, scrollTop, viewportStart, availHeight, virtualScrollTop) {
         // const heights = props.customRowsHeights.slice().sort((item1, item2) => item1.index - item2.index);
         const heights = props.customRowsHeights.reduce((accum, item) => {
             accum[item.index] = item.height;
@@ -169,6 +152,27 @@ export default class InfiniteScrollView extends Component {
             height,
             offsetTop
         };
+    }
+
+    getViewState(props, scrollTop, viewportStart, availHeight) {
+        const virtualScrollTop = Math.max(0, scrollTop - viewportStart);
+
+        if (!props.customRowsHeights || !props.customRowsHeights.length) {
+            const fromIndex = Math.max(0, Math.floor(virtualScrollTop / props.rowHeight) - PRELOAD);
+            const toIndex = Math.min(
+                props.rowsCount,
+                fromIndex + Math.floor(availHeight / props.rowHeight) + PRELOAD * 2
+            );
+
+            return {
+                fromIndex,
+                toIndex,
+                offsetTop: fromIndex * props.rowHeight,
+                height: props.rowsCount * props.rowHeight
+            };
+        }
+
+        return this.getViewStateWithCustomHeights(props, scrollTop, viewportStart, availHeight, virtualScrollTop);
     }
 
     updateScrollState(props) {
