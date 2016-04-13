@@ -200,6 +200,29 @@ render(
                 </Column>
             </Row>
         </div>
+        <div className="TableExample2">
+            <Table
+                rowHeight={30}
+                rowsCount={1}
+                columnWidths={{
+                    field1: 100,
+                    field2: 300,
+                    field3: 100,
+                    field4: 150
+                }}
+                columns={['field1', 'field4', 'field3', 'field2']}
+                customRowsHeights={[
+                    {
+                        index: 0,
+                        height: 500
+                    }
+                ]}
+            >
+                <TableHeader key="header" />
+                <TableMyRow />
+                <TableFooter key="footer" />
+            </Table>
+        </div>
         <div className="TableExample">
             <Table
                 rowHeight={30}

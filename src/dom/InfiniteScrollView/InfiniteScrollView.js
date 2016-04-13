@@ -215,8 +215,8 @@ export default class InfiniteScrollView extends Component {
 
 
         return {
-            fromIndex,
-            toIndex,
+            fromIndex: fromIndex,
+            toIndex: toIndex === -1 ? rowsCount : toIndex,
             height: fullHeight,
             offsetTop
         };
