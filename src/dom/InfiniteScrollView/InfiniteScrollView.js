@@ -121,6 +121,8 @@ export default class InfiniteScrollView extends Component {
 
         let prevIndex = -1;
 
+        let colHeight = availHeight;
+
         for (let index = 0; index < rowsCount; index++) {
             if (prevIndex === index) {
                 throw new Error(`CYCLE ${index}`);
@@ -146,12 +148,14 @@ export default class InfiniteScrollView extends Component {
                         }
                     } else if (toIndex === -1) {
                         const propablyIndexNeeded = Math.floor(
-                            (availHeight - (height - virtualScrollTop)) / rowHeight
+                            colHeight / rowHeight
                         ) + index + 1;
 
                         if (propablyIndexNeeded <= nextIndex + 1) {
                             toIndex = propablyIndexNeeded;
                         }
+
+                        colHeight -= currentHeight;
                     }
 
                     height += currentHeight;
@@ -164,17 +168,19 @@ export default class InfiniteScrollView extends Component {
                             offsetTop = height;
                             fromIndex = index;
 
-                            if (diff >= availHeight) {
+                            if (diff >= colHeight) {
                                 toIndex = fromIndex + 1;
                             }
                         }
 
                     } else if (toIndex  === -1) {
-                        const diff = (height + nextModifiedHeight.height) - offsetTop - availHeight;
+                        const diff = (colHeight - nextModifiedHeight.height);
 
-                        if (diff >= 0) {
+                        if (diff <= 0) {
                             toIndex = index + 1;
                         }
+
+                        colHeight -= nextModifiedHeight.height;
                     }
 
                     height += nextModifiedHeight.height;
@@ -196,7 +202,7 @@ export default class InfiniteScrollView extends Component {
                         // (availHeight + (height - offsetTop)) / rowHeight
                         // (availHeight - (height - virtualScrollTop)) / rowHeight
                         // (virtualScrollTop - availHeight) / rowHeight
-                        availHeight / rowHeight
+                        colHeight / rowHeight
                     ) + fromIndex + 1, rowsCount);
 
                     toIndex = propablyIndexNeeded;
