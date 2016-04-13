@@ -202,7 +202,7 @@ export default class InfiniteScrollView extends Component {
                         // (availHeight + (height - offsetTop)) / rowHeight
                         // (availHeight - (height - virtualScrollTop)) / rowHeight
                         // (virtualScrollTop - availHeight) / rowHeight
-                        colHeight / rowHeight
+                        availHeight / rowHeight
                     ) + fromIndex + 1, rowsCount);
 
                     toIndex = propablyIndexNeeded;
