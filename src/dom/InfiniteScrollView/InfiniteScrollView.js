@@ -104,7 +104,6 @@ export default class InfiniteScrollView extends Component {
     };
 
     getViewStateWithCustomHeights2(props, scrollTop, viewportStart, availHeight, virtualScrollTop) {
-        const started = window.performance ? window.performance.now() : Date.now();
         const sortedHeights = props.customRowsHeights.slice().sort((item1, item2) => item1.index - item2.index);
 
         const {rowHeight, rowsCount} = props;
