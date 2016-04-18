@@ -8,7 +8,15 @@ const block = bem('Table');
 
 function TableCell(props) {
     return <Block {...props} static={true}>
-        {props.children}
+        {Children.map(props.children, (item) => {
+            if (typeof item !== 'object') {
+                return item;
+            }
+
+            return cloneElement(item, Object.assign({}, item.props, {
+                width: props.width
+            }));
+        })}
     </Block>;
 }
 

@@ -75,10 +75,14 @@ function TableHeader({height}) {
     </Table.Row>;
 }
 
+function Test({width}) {
+    return <span>{width}</span>;
+}
+
 function TableFooter({height}) {
     return <Table.Row index={-2} height={height}>
         <Table.Cell field="field2">
-            Foot2
+            <Test />
         </Table.Cell>
         <Table.Cell field="field3">
             Foot3
