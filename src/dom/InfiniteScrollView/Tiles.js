@@ -82,7 +82,13 @@ export function getTiles(customRowsHeights, rowsCount, rowHeight, tileHeight) {
         } else if (currentTileHeight > tileHeight) {
             currentTile.indexTo = index + countToAdd;
 
-            currentTile.offsetTopDiff = 0;
+            let offsetTopDiff = 0;
+
+            if (nextModifiedHeight && index === nextModifiedHeight.index) {
+                offsetTopDiff = currentTileHeight - nextModifiedHeight.height;
+            } else {
+                offsetTopDiff = currentTileHeight - rowHeight;
+            }
 
             currentTileHeight = currentTileHeight - tileHeight;
 
@@ -100,7 +106,7 @@ export function getTiles(customRowsHeights, rowsCount, rowHeight, tileHeight) {
                     indexTo: index + countToAdd,
 
                     heightDiff: 0,
-                    offsetTopDiff: 0,
+                    offsetTopDiff: offsetTopDiff,
 
                     linkedHead: indexOfTileToLink,
                     hasLinkedTail: true
@@ -114,7 +120,7 @@ export function getTiles(customRowsHeights, rowsCount, rowHeight, tileHeight) {
                 indexTo: 0,
 
                 heightDiff: 0,
-                offsetTopDiff: 0,
+                offsetTopDiff: offsetTopDiff,
 
                 linkedHead: indexOfTileToLink,
                 hasLinkedTail: false
@@ -155,32 +161,37 @@ export function selectRowsAndOffsetFromVisibleTiles(
     if (!tiles.length) {
         return {
             indexFrom: 0,
-            indexTo: 0
+            indexTo: 0,
+            offsetTop: 0
         };
     }
 
-    const diff = normalizedOffsetTop % tileHeight;
-    const tileFromIndex = Math.max(((normalizedOffsetTop - diff) / tileHeight), 0);
-    const tileFrom = tiles[tileFromIndex];
-    const tileTo = [Math.max(diff ? tileFrom + 2 : tileFrom + 1, tiles.length - 1)];
+    const needToAddOneMore = !!(availHeight % tileHeight);
 
-    let {indexFrom} = tileFrom;
-    let {indexTo} = tileTo;
-    let {offsetTopDiff} = tileFrom;
+    const tileIndexFrom = Math.max(
+        0,
+        Math.min(
+            rowsCount - 1,
+            Math.floor(normalizedOffsetTop / tileHeight) - 1
+        )
+    );
 
-    const tileIndex = tileFrom.linkedHead !== -1 ? tileFrom.linkedHead : tileFromIndex;
+    let tileFrom = tiles[tileIndexFrom];
 
-    if (tileFrom.linkedHead !== -1) {
-        indexFrom = Math.max(indexFrom - 1, 0);
-    }
+    const tileIndexTo = Math.min(
+        rowsCount,
+        tileIndexFrom + Math.floor(availHeight / tileHeight) + (needToAddOneMore ? 2 : 1)
+    );
 
-    if (tileTo.hasLinkedTail !== -1) {
-        indexTo = Math.max(indexTo + 1, rowsCount);
-    }
+    const tileTo = tiles[tileIndexTo];
+
+    const offsetTop = (tileFrom.linkedHead !== -1 ? tileFrom.linkedHead + 1 : tileIndexFrom) * tileHeight;
+    const offsetTopDiff = tileFrom.offsetTopDiff;
 
     return {
-        indexFrom,
-        indexTo,
-        offsetTop: (tileIndex * tileHeight) - offsetTopDiff
+        indexFrom: tileFrom.linkedHead !== -1 ?
+            tiles[tileFrom.linkedHead].indexTo - 1 : tileFrom.indexFrom,
+        indexTo: tileTo.indexTo,
+        offsetTop: offsetTop - (offsetTopDiff ? (tileHeight - offsetTopDiff) : 0)
     };
 }

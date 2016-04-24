@@ -2,7 +2,7 @@ import React, {Component, PropTypes, Children, cloneElement} from 'react';
 import {findDOMNode} from 'react-dom';
 import bem from '../bem';
 import Column from '../Column';
-
+import {getTiles, getHeightFromTiles, selectRowsAndOffsetFromVisibleTiles} from './Tiles';
 
 function defaultParentWithScrollGetter(viewNode) {
     return document;
@@ -43,6 +43,8 @@ if (typeof cancelAnimationFrame !== 'undefined' && typeof requestAnimationFrame 
     requestFrame = (cb) => setTimeout(cb, 32);
     cancelFrame = (id) => clearTimeout(id);
 }
+
+const defaultArray = [];
 
 const PRELOAD = 2;
 
@@ -103,234 +105,79 @@ export default class InfiniteScrollView extends Component {
         this.frame = requestFrame(() => this.updateScrollState(this.props));
     };
 
-    getViewStateWithCustomHeights2(props, scrollTop, viewportStart, availHeight, virtualScrollTop) {
-        const sortedHeights = props.customRowsHeights.slice().sort((item1, item2) => item1.index - item2.index);
-
-        const {rowHeight, rowsCount} = props;
-
-        const sortedHeightsSumm = sortedHeights.reduce((summ, item) => summ + item.height, 0);
-        const fullHeight = (rowsCount - sortedHeights.length) * rowHeight + sortedHeightsSumm;
-
-        let offsetTop = 0;
-        let height = 0;
-        let fromIndex = -1;
-        let toIndex = -1;
-
-        let currentHeightModifierIndex = 0;
-
-        let prevIndex = -1;
-
-        let colHeight = availHeight;
-
-        for (let index = 0; index < rowsCount; index++) {
-            if (prevIndex === index) {
-                throw new Error(`CYCLE ${index}`);
-            } else {
-                prevIndex = index;
-            }
-
-            const nextModifiedHeight = sortedHeights[currentHeightModifierIndex];
-
-            if (nextModifiedHeight) {
-                if (index < nextModifiedHeight.index) {
-                    let nextIndex = nextModifiedHeight.index - 1;
-                    let currentHeight = (nextModifiedHeight.index - index) * rowHeight;
-
-                    if (fromIndex === -1) {
-                        const propablyIndexNeeded = index + Math.floor((virtualScrollTop - height) / rowHeight);
-
-                        if (propablyIndexNeeded <= nextIndex && propablyIndexNeeded >= index) {
-                            nextIndex = propablyIndexNeeded;
-                            fromIndex = propablyIndexNeeded;
-                            offsetTop = height + (nextIndex - index) * rowHeight;
-                            currentHeight = (nextIndex - index) * rowHeight;
-                        }
-                    } else if (toIndex === -1) {
-                        const propablyIndexNeeded = Math.floor(
-                            colHeight / rowHeight
-                        ) + index + 1;
-
-                        if (propablyIndexNeeded <= nextIndex + 1) {
-                            toIndex = propablyIndexNeeded;
-                        }
-
-                        colHeight -= currentHeight;
-                    }
-
-                    height += currentHeight;
-                    index = nextIndex;
-                } else if (nextModifiedHeight && index === nextModifiedHeight.index) {
-                    if (fromIndex === -1) {
-                        const diff = (height + nextModifiedHeight.height) - virtualScrollTop;
-
-                        if (diff >= 0) {
-                            offsetTop = height;
-                            fromIndex = index;
-
-                            if (diff >= colHeight) {
-                                toIndex = fromIndex + 1;
-                            }
-                        }
-
-                    } else if (toIndex  === -1) {
-                        const diff = (colHeight - nextModifiedHeight.height);
-
-                        if (diff <= 0) {
-                            toIndex = index + 1;
-                        }
-
-                        colHeight -= nextModifiedHeight.height;
-                    }
-
-                    height += nextModifiedHeight.height;
-                    currentHeightModifierIndex++;
-                }
-            } else {
-                let currentHeight = (rowsCount - index) * rowHeight;
-                let nextIndex = rowsCount - 1;
-
-                if (fromIndex === -1) {
-                    const propablyIndexNeeded = index + Math.floor((virtualScrollTop - height) / rowHeight);
-
-                    nextIndex = propablyIndexNeeded;
-                    fromIndex = propablyIndexNeeded;
-                    offsetTop = height + (nextIndex - index) * rowHeight;
-                    currentHeight = (nextIndex - index + 1) * rowHeight;
-                } else if (toIndex === -1) {
-                    const propablyIndexNeeded = Math.min(Math.floor(
-                        // (availHeight + (height - offsetTop)) / rowHeight
-                        // (availHeight - (height - virtualScrollTop)) / rowHeight
-                        // (virtualScrollTop - availHeight) / rowHeight
-                        availHeight / rowHeight
-                    ) + fromIndex + 1, rowsCount);
-
-                    toIndex = propablyIndexNeeded;
-                }
-
-                height += currentHeight;
-                index = nextIndex;
-            }
+    needToUpdateTiles(customRowsHeights, rowsCount, rowHeight, availHeight) {
+        if (this.prevCustomRowsHeights !== customRowsHeights) {
+            return true;
         }
 
+        if (this.prevRowsCount !== rowsCount) {
+            return true;
+        }
 
-        return {
-            fromIndex: fromIndex,
-            toIndex: toIndex === -1 ? rowsCount : toIndex,
-            height: fullHeight,
-            offsetTop
-        };
+        if (this.prevRowHeight !== rowHeight) {
+            return true;
+        }
+
+        if (this.prevAvailHeight !== availHeight) {
+            return true;
+        }
+
+        return false;
     }
 
-    getViewStateWithCustomHeights(props, scrollTop, viewportStart, availHeight, virtualScrollTop) {
-        const sortedHeights = props.customRowsHeights.slice().sort((item1, item2) => item1.index - item2.index);
+    getTilesAndHeight(customRowsHeights, rowsCount, rowHeight, availHeight) {
+        if (!this.tiles || this.needToUpdateTiles(customRowsHeights, rowsCount, rowHeight, availHeight)) {
+            this.prevCustomRowsHeights = customRowsHeights;
+            this.prevRowsCount = rowsCount;
+            this.prevRowHeight = rowHeight;
+            this.prevAvailHeight = availHeight;
 
-        const heights = props.customRowsHeights.reduce((accum, item) => {
-            accum[item.index] = item.height;
+            const tileHeight = Math.floor(availHeight / 2 / rowHeight + 1) * rowHeight;
 
-            return accum;
-        }, {});
+            this.tiles = getTiles(
+                customRowsHeights || [],
+                rowsCount,
+                rowHeight,
+                tileHeight
+            );
 
-        let offsetTop = 0;
-        let height = 0;
-        let fromIndex = -1;
-        let toIndex = -1;
-
-        let lastUpliftedIndex = 0;
-        let colHeight = 0;
-
-        for (let index = 0; index < props.rowsCount; index++) {
-            const currentHeight = (index in heights) ? heights[index] : props.rowHeight;
-
-            if (fromIndex === -1) {
-                if ((offsetTop + currentHeight) < virtualScrollTop) {
-                    offsetTop += currentHeight;
-                } else {
-                    colHeight = (offsetTop + currentHeight) - virtualScrollTop;
-                    fromIndex = index;
-
-                    if (colHeight >= availHeight) {
-                        toIndex = fromIndex + 1;
-                    }
-                }
-            } else if (toIndex === -1) {
-                colHeight += currentHeight;
-
-                if (colHeight >= availHeight || index + 1 === props.rowsCount) {
-                    toIndex = index + 1;
-                }
-            }
-
-            height += currentHeight;
+            this.fullHeight = getHeightFromTiles(this.tiles, tileHeight);
         }
 
         return {
-            fromIndex,
-            toIndex,
-            height,
-            offsetTop
+            tiles: this.tiles,
+            height: this.fullHeight
         };
     }
 
     getViewState(props, scrollTop, viewportStart, availHeight) {
         const virtualScrollTop = Math.max(0, scrollTop - viewportStart);
 
-        if (!props.customRowsHeights || !props.customRowsHeights.length) {
-            const fromIndex = Math.max(0, Math.floor(virtualScrollTop / props.rowHeight) - PRELOAD);
-            const toIndex = Math.min(
-                props.rowsCount,
-                fromIndex + Math.floor(availHeight / props.rowHeight) + PRELOAD * 2
-            );
+        const {tiles, height} = this.getTilesAndHeight(
+            props.customRowsHeights || defaultArray,
+            props.rowsCount,
+            props.rowHeight,
+            availHeight
+        );
 
-            return {
-                fromIndex,
-                toIndex,
-                offsetTop: fromIndex * props.rowHeight,
-                height: props.rowsCount * props.rowHeight
-            };
+        const {indexFrom, indexTo, offsetTop} = selectRowsAndOffsetFromVisibleTiles(
+            tiles,
+            props.rowsCount,
+            virtualScrollTop,
+            Math.floor(availHeight / 2 / props.rowHeight + 1) * props.rowHeight,
+            availHeight
+        );
+
+        if (indexTo - indexFrom > 1000) {
+            throw new Error('WTF');
         }
 
-        // props = Object.assign({}, props, {
-        //     customRowsHeights: []
-        // });
-
-        // console.clear && console.clear();
-        // console.log('PERF DIFF');
-        // const started = window.performance ? window.performance.now() : new Date();
-        // const origState = this.getViewStateWithCustomHeights(
-        //     props, scrollTop, viewportStart, availHeight, virtualScrollTop
-        // );
-        // const ended = window.performance ? window.performance.now() : new Date();
-
-        // console.log('perf original', ended - started);
-
-        // const started2 = window.performance ? window.performance.now() : new Date();
-        const newState = this.getViewStateWithCustomHeights2(
-            props, scrollTop, viewportStart, availHeight, virtualScrollTop
-        );
-        // const ended2 = window.performance ? window.performance.now() : new Date();
-
-        // console.log('perf new', ended2 - started2);
-
-        // console.log('DIFF');
-        // let success = true;
-
-        // Object.keys(origState).forEach((key) => {
-        //     success = success && origState[key] === newState[key];
-        //     if (origState[key] !== newState[key]) {
-        //         console.log(key, origState[key], newState[key]);
-        //     }
-        // });
-
-        // if (success) {
-        //     console.log('SUCCESS');
-        //     console.log('SUCCESS');
-        //     console.log('SUCCESS');
-        //     console.log('SUCCESS');
-        // }
-
-        // console.log('END DIFF');
-
-        return newState;
+        return {
+            fromIndex: indexFrom,
+            toIndex: indexTo,
+            height,
+            offsetTop
+        };
     }
 
     updateScrollState(props) {

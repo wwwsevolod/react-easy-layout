@@ -205,7 +205,7 @@ render(
             </Row>
         </div>
         <div className="TableExample2">
-            <Table
+            {/*<Table
                 rowHeight={30}
                 rowsCount={1}
                 columnWidths={{
@@ -225,7 +225,7 @@ render(
                 <TableHeader key="header" />
                 <TableMyRow />
                 <TableFooter key="footer" />
-            </Table>
+            </Table>*/}
         </div>
         <div className="TableExample">
             <Table

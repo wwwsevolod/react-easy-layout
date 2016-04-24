@@ -159,7 +159,7 @@ describe('Tiles — engine that powers InfiniteScrollView', () => {
                 indexTo: 7,
                 heightDiff: 0,
                 linkedHead: 0,
-                offsetTopDiff: 0,
+                offsetTopDiff: 80,
                 hasLinkedTail: true
             },
             {
@@ -199,7 +199,7 @@ describe('Tiles — engine that powers InfiniteScrollView', () => {
                 indexTo: 7,
                 heightDiff: 0,
                 linkedHead: 0,
-                offsetTopDiff: 0,
+                offsetTopDiff: 80,
                 hasLinkedTail: true
             },
             {
@@ -223,7 +223,7 @@ describe('Tiles — engine that powers InfiniteScrollView', () => {
                 indexTo: 17,
                 heightDiff: 0,
                 linkedHead: 3,
-                offsetTopDiff: 0,
+                offsetTopDiff: 80,
                 hasLinkedTail: true
             },
             {
@@ -357,7 +357,7 @@ describe('Tiles — engine that powers InfiniteScrollView', () => {
                 indexTo: 13,
                 heightDiff: 0,
                 linkedHead: 2,
-                offsetTopDiff: 0,
+                offsetTopDiff: 80,
                 hasLinkedTail: true
             },
             {
@@ -453,7 +453,7 @@ describe('Tiles — engine that powers InfiniteScrollView', () => {
                 indexTo: 3,
                 heightDiff: 0,
                 linkedHead: 0,
-                offsetTopDiff: 0,
+                offsetTopDiff: 20,
                 hasLinkedTail: true
             },
             {
