@@ -171,7 +171,7 @@ export function selectRowsAndOffsetFromVisibleTiles(
     const tileIndexFrom = Math.max(
         0,
         Math.min(
-            rowsCount - 1,
+            tiles.length - 1,
             Math.floor(normalizedOffsetTop / tileHeight)
         )
     );
@@ -179,7 +179,7 @@ export function selectRowsAndOffsetFromVisibleTiles(
     let tileFrom = tiles[tileIndexFrom];
 
     const tileIndexTo = Math.min(
-        rowsCount - 1,
+        tiles.length - 1,
         tileIndexFrom + Math.floor(availHeight / tileHeight) + (needToAddOneMore ? 1 : 0)
     );
 
