@@ -27,12 +27,14 @@ export default class TableRow extends Component {
 
     renderColumns() {
         if (!this.context.tableColumns) {
+            let index = 0;
             return Children.map(this.props.children, (child) => cloneElement(child, Object.assign(
                 {}, 
                 child.props,
                 {
                     width: this.context.tableCellWidths[child.props.field] || 0,
-                    index: this.props.index
+                    index: index++,
+                    rowIndex: this.props.index
                 }
             )));
         }
@@ -55,9 +57,10 @@ export default class TableRow extends Component {
             return columns[child1.props.field] - columns[child2.props.field];
         }).map((child, index) => {
             let width = this.context.tableCellWidths[child.props.field] || 0;
+            const initialSpan = columns[child.props.field] - span - index;
 
             if (index !== (columns[child.props.field] - span)) {
-                let currentSpan = columns[child.props.field] - span - index;
+                let currentSpan = initialSpan;
                 span += currentSpan;
 
                 while (currentSpan--) {
@@ -67,7 +70,8 @@ export default class TableRow extends Component {
 
             return cloneElement(child, Object.assign({}, child.props, {
                 width,
-                index: this.props.index
+                index: initialSpan + index,
+                rowIndex: this.props.index
             }));
         });
     }

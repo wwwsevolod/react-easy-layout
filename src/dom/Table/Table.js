@@ -14,14 +14,18 @@ function TableCell(props) {
             }
 
             return cloneElement(item, Object.assign({}, item.props, {
-                width: props.width
+                width: props.width,
+                index: props.index,
+                rowIndex: props.rowIndex
             }));
         })}
     </Block>;
 }
 
 TableCell.propTypes = {
-    width: PropTypes.any // eslint-disable-line react/forbid-prop-types
+    width: PropTypes.any, // eslint-disable-line react/forbid-prop-types
+    rowIndex: PropTypes.number,
+    index: PropTypes.number
 };
 
 export default class Table extends Component {
