@@ -67,7 +67,11 @@ export default class InfiniteScrollView extends Component {
         scrollTopGetter: PropTypes.func.isRequired,
         viewportStartGetter: PropTypes.func.isRequired,
         maxViewportGetter: PropTypes.func.isRequired,
-        getPrimaryKeyValue: PropTypes.func.isRequired
+        getPrimaryKeyValue: PropTypes.func.isRequired,
+
+        renderHeader: PropTypes.func,
+        renderRow: PropTypes.func,
+        renderFooter: PropTypes.func
     };
 
 
@@ -276,76 +280,25 @@ export default class InfiniteScrollView extends Component {
         }
     }
 
-    getChildren() {
-        const result = {
-            headerChildren: null,
-            rowChildren: null,
-            footerChildren: null
-        };
+    render() {
+        const {fromIndex, toIndex, additionalHeightFakeTop} = this.state;
 
-        const {children} = this.props;
+        const rows = [];
 
-        if (!Array.isArray(children) && !children.key) {
-            result.rowChildren = children;
-        } else {
-            Children.forEach(children, (child) => {
-                if ((!child.key || child.key === 'row') && !result.rowChildren) {
-                    result.rowChildren = child;
-                } else if (child.key === 'header') {
-                    result.headerChildren = child;
-                } else if (child.key === 'footer') {
-                    result.footerChildren = child;
-                } else {
-                    if (process.env.NODE_ENV === 'development') {
-                        console.error('Two or more row childern (with key="row" or without key at all).'); 
-                    }
-                }
-            });
-        }
+        let headerElement = null;
 
-        return result;
-    }
-
-    getRowElement(rowChildren, height, index, primaryKey) {
-        return cloneElement(rowChildren, Object.assign(
-            {},
-            rowChildren.props,
-            {
+        if (this.props.renderHeader) {
+            headerElement = this.props.renderHeader({
+                scrollTop: this.state.scrollTop,
+                scrollLeft: this.state.scrollLeft,
                 availHeight: this.state.availHeight,
                 viewportStart: this.state.viewportStart,
                 rowsCount: this.props.rowsCount,
-                height,
-                index,
-                primaryKey,
-                key: primaryKey,
-                defaultHeight: this.props.rowHeight
-            }
-        ));
-    }
-
-    renderRows() {
-        const {fromIndex, toIndex, additionalHeightFakeTop} = this.state;
-
-        const allRows = [];
-
-        const {headerChildren, rowChildren, footerChildren} = this.getChildren();
-
-        if (headerChildren) {
-            allRows.push(cloneElement(headerChildren, Object.assign(
-                {},
-                headerChildren.props,
-                {
-                    scrollTop: this.state.scrollTop,
-                    scrollLeft: this.state.scrollLeft,
-                    availHeight: this.state.availHeight,
-                    viewportStart: this.state.viewportStart,
-                    rowsCount: this.props.rowsCount,
-                    height: this.props.rowHeight,
-                    defaultHeight: this.props.rowHeight,
-                    fromIndex,
-                    toIndex
-                }
-            )));
+                height: this.props.rowHeight,
+                defaultHeight: this.props.rowHeight,
+                fromIndex,
+                toIndex
+            });
         }
 
         let customHeights = {};
@@ -357,53 +310,53 @@ export default class InfiniteScrollView extends Component {
             }, {});
         }
 
-        if (rowChildren) {
-            const rows = [];
-
+        if (this.props.renderRow) {
             for (let index = fromIndex; index < toIndex; index++) {
                 const primaryKey = this.props.getPrimaryKeyValue(index);
 
                 const height = index in customHeights ? customHeights[index] : this.props.rowHeight;
 
-                rows.push(this.getRowElement(rowChildren, height, index, primaryKey));
+                rows.push(this.props.renderRow({
+                    availHeight: this.state.availHeight,
+                    viewportStart: this.state.viewportStart,
+                    rowsCount: this.props.rowsCount,
+                    height,
+                    index,
+                    primaryKey,
+                    key: primaryKey,
+                    defaultHeight: this.props.rowHeight
+                }));
             }
+        }
 
-            allRows.push(<div style={this.state.totalHeightStyle} key="__real-rows__" ref="infiniteScrollView">
+
+        let footerElement = null;
+
+        if (this.props.renderFooter) {
+            footerElement = this.props.renderFooter({
+                scrollTop: this.state.scrollTop,
+                scrollLeft: this.state.scrollLeft,
+                availHeight: this.state.availHeight,
+                viewportStart: this.state.viewportStart,
+                rowsCount: this.props.rowsCount,
+                height: this.props.rowHeight,
+                fromIndex,
+                toIndex,
+                defaultHeight: this.props.rowHeight
+            });
+        }
+
+        return <div>
+            {headerElement}
+            <div style={this.state.totalHeightStyle} key="__real-rows__" ref="infiniteScrollView">
                 {rows.length ? <div
                     className="InfiniteScrollView__Offset"
                     style={{transform: `translateY(${this.state.offsetTop}px)`}}
                 >
                     {rows}
                 </div> : null}
-            </div>);
-        }
-
-
-
-        if (footerChildren) {
-            allRows.push(cloneElement(footerChildren, Object.assign(
-                {},
-                footerChildren.props,
-                {
-                    scrollTop: this.state.scrollTop,
-                    scrollLeft: this.state.scrollLeft,
-                    availHeight: this.state.availHeight,
-                    viewportStart: this.state.viewportStart,
-                    rowsCount: this.props.rowsCount,
-                    height: this.props.rowHeight,
-                    fromIndex,
-                    toIndex,
-                    defaultHeight: this.props.rowHeight
-                }
-            )));
-        }
-
-        return allRows;
-    }
-
-    render() {
-        return <div>
-            {this.renderRows()}
+            </div>
+            {footerElement}
         </div>;
     }
 }
