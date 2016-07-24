@@ -106,7 +106,11 @@ export default class InfiniteScrollView extends Component {
         if (this.frame) {
             cancelFrame(this.frame);
         }
-        this.frame = requestFrame(() => this.updateScrollState(this.props));
+        this.frame = requestFrame(() => {
+            this.frame = requestFrame(() => {
+                this.updateScrollState(this.props);
+            });
+        });
     };
 
     needToUpdateTiles(customRowsHeights, rowsCount, rowHeight, availHeight) {
@@ -136,7 +140,7 @@ export default class InfiniteScrollView extends Component {
             this.prevRowHeight = rowHeight;
             this.prevAvailHeight = availHeight;
 
-            const tileHeight = Math.floor(availHeight / 2 / rowHeight + 1) * rowHeight;
+            const tileHeight = Math.floor(availHeight / 4 / rowHeight + 1) * rowHeight;
 
             this.tiles = getTiles(
                 customRowsHeights || [],
@@ -168,7 +172,7 @@ export default class InfiniteScrollView extends Component {
             tiles,
             props.rowsCount,
             virtualScrollTop,
-            Math.floor(availHeight / 2 / props.rowHeight + 1) * props.rowHeight,
+            Math.floor(availHeight / 4 / props.rowHeight + 1) * props.rowHeight,
             availHeight
         );
 
@@ -196,8 +200,10 @@ export default class InfiniteScrollView extends Component {
         const newState = {};
 
         newState.scrollLeft = props.scrollLeftGetter(infiniteScrollView, this.nodeWithScroll);
-        const scrollTop = props.scrollTopGetter(infiniteScrollView, this.nodeWithScroll);
-        const availHeight = props.maxViewportGetter(infiniteScrollView, this.nodeWithScroll);
+        const _availHeight = props.maxViewportGetter(infiniteScrollView, this.nodeWithScroll);
+        const _scrollTop = props.scrollTopGetter(infiniteScrollView, this.nodeWithScroll);
+        const scrollTop = Math.max(_scrollTop - (_availHeight / 2), 0);
+        const availHeight = _availHeight * 2;
         const viewportStart = props.viewportStartGetter(infiniteScrollView, this.nodeWithScroll);
 
 
