@@ -201,14 +201,14 @@ export default class InfiniteScrollView extends Component {
 
         newState.scrollLeft = props.scrollLeftGetter(infiniteScrollView, this.nodeWithScroll);
 
-        const _availHeight = props.maxViewportGetter(infiniteScrollView, this.nodeWithScroll);
-        const _scrollTop = props.scrollTopGetter(infiniteScrollView, this.nodeWithScroll);
+        const availHeight = props.maxViewportGetter(infiniteScrollView, this.nodeWithScroll);
+        const scrollTop = props.scrollTopGetter(infiniteScrollView, this.nodeWithScroll);
 
-        const scrollTop = Math.max(_scrollTop - (_availHeight / 2), 0);
-        const availHeight = _availHeight * 2;
-        const _viewportStart = props.viewportStartGetter(infiniteScrollView, this.nodeWithScroll);
+        // const scrollTop = Math.max(_scrollTop - (_availHeight / 2), 0);
+        // const availHeight = _availHeight * 2;
+        const viewportStart = props.viewportStartGetter(infiniteScrollView, this.nodeWithScroll);
 
-        const viewportStart = Math.max(_viewportStart - (_availHeight / 2), 0);
+        // const viewportStart = Math.max(_viewportStart - (_availHeight / 2), 0);
 
 
         newState.scrollTop = scrollTop;
