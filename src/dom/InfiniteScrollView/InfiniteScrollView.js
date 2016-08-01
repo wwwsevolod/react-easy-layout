@@ -46,8 +46,6 @@ if (typeof cancelAnimationFrame !== 'undefined' && typeof requestAnimationFrame 
 
 const defaultArray = [];
 
-const PRELOAD = 2;
-
 const block = bem('InfiniteScrollView');
 
 export default class InfiniteScrollView extends Component {
@@ -140,7 +138,7 @@ export default class InfiniteScrollView extends Component {
             this.prevRowHeight = rowHeight;
             this.prevAvailHeight = availHeight;
 
-            const tileHeight = Math.floor(availHeight / 4 / rowHeight + 1) * rowHeight;
+            const tileHeight = Math.floor(availHeight / 2 / rowHeight + 1) * rowHeight;
 
             this.tiles = getTiles(
                 customRowsHeights || [],
@@ -172,7 +170,7 @@ export default class InfiniteScrollView extends Component {
             tiles,
             props.rowsCount,
             virtualScrollTop,
-            Math.floor(availHeight / 4 / props.rowHeight + 1) * props.rowHeight,
+            Math.floor(availHeight / 2 / props.rowHeight + 1) * props.rowHeight,
             availHeight
         );
 
