@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build-and-run": "$(npm bin)/webpack-dev-server --config webpack.conf.js"
+    "build-and-run": "NODE_ENV=production $(npm bin)/webpack-dev-server --config webpack.conf.js"
   },
   "author": "wwwsevolod",
   "license": "MIT",

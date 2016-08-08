@@ -7,57 +7,6 @@ import 'normalize.css';
 import '../src/dom/easy-layout.css';
 import './index.css';
 
-function MyRow({
-    index,
-    height
-}) {
-    return <Row
-        key={'row' + index}
-        height={height}
-    >
-        <Block static={true} width="100px">
-            id: {index}
-        </Block>
-        <Block static={true} width="200px">
-            count: {Math.floor(index * 1000)}
-        </Block>
-        <Block static={true} width="100px">
-            asd: {index + 100500}
-        </Block>
-        <Block>
-            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
-        </Block>
-        <Block static={true} width="100px">
-            id: {index}
-        </Block>
-        <Block static={true} width="200px">
-            count: {Math.floor(index * 1000)}
-        </Block>
-        <Block static={true} width="100px">
-            asd: {index + 100500}
-        </Block>
-        <Block>
-            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
-        </Block>
-    </Row>;
-}
-
-function Header() {
-    return <Row>
-        <Block>
-            Header
-        </Block>
-    </Row>;
-}
-
-function Footer() {
-    return <Row>
-        <Block>
-            Footer
-        </Block>
-    </Row>;
-}
-
 function TableHeader({height}) {
     return <Table.Row index={-1} height={height}>
         <Table.Cell field="field1">
@@ -90,12 +39,14 @@ function TableFooter({height}) {
     </Table.Row>;
 }
 
-function TableMyRow({
-    index,
-    height
-}) {
+function TableRow(props) {
+    const {
+        index,
+        height
+    } = props;
+
     return <Table.Row
-        key={'row' + index}
+        {...props}
         height={height}
         index={index}
     >
@@ -111,198 +62,90 @@ function TableMyRow({
         <Table.Cell field="field4">
             isOdd: {index % 2 !== 0 ? 'true' : 'false'}
         </Table.Cell>
+        <Table.Cell field="field5">
+            id: {index}
+        </Table.Cell>
+        <Table.Cell field="field6">
+            count: {Math.floor(index * 1000)}
+        </Table.Cell>
+        <Table.Cell field="field7">
+            asd: {index + 100500}
+        </Table.Cell>
+        <Table.Cell field="field8">
+            id: {index}
+        </Table.Cell>
+        <Table.Cell field="field9">
+            count: {Math.floor(index * 1000)}
+        </Table.Cell>
+        <Table.Cell field="field10">
+            asd: {index + 100500}
+        </Table.Cell>
+        <Table.Cell field="field11">
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Table.Cell>
+        <Table.Cell field="field12">
+            id: {index}
+        </Table.Cell>
+        <Table.Cell field="field13">
+            count: {Math.floor(index * 1000)}
+        </Table.Cell>
+        <Table.Cell field="field14">
+            asd: {index + 100500}
+        </Table.Cell>
+        <Table.Cell field="field15">
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Table.Cell>
+        <Table.Cell field="field16">
+            id: {index}
+        </Table.Cell>
+        <Table.Cell field="field17">
+            count: {Math.floor(index * 1000)}
+        </Table.Cell>
+        <Table.Cell field="field18">
+            asd: {index + 100500}
+        </Table.Cell>
+        <Table.Cell field="field19">
+            isOdd: {index % 2 !== 0 ? 'true' : 'false'}
+        </Table.Cell>
     </Table.Row>;
 }
 
 render(
     <div className="App">
-        <div className="RowExample">
-            <Row>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-                <Block>
-                    <div className="RowExample__Right">
-                    Right
-                    </div>
-                </Block>
-            </Row>
-        </div>
-        <div className="RowExample">
-            <Row>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-                <Block>
-                    <div className="RowExample__Right">
-                    Right
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-            </Row>
-        </div>
-        <div className="RowExample">
-            <Row height="100%" fix={false}>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-                <Block alignSelf={Block.TO_END}>
-                    <div className="RowExample__Right">
-                    Right
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-                <Block static={true}>
-                    <div className="RowExample__Left">
-                    Left
-                    </div>
-                </Block>
-            </Row>
-        </div>
-        <div className="RowExample">
-            <Row height="100%">
-                <Column>
-                    <Block static={true}>
-                        <div className="RowExample__Left">
-                            Left
-                        </div>
-                    </Block>
-                    <Block alignSelf={Block.TO_END}>
-                        <div className="RowExample__Right">
-                            Right
-                        </div>
-                    </Block>
-                    <Block static={true}>
-                        <div className="RowExample__Left">
-                            Left
-                        </div>
-                    </Block>
-                    <Block static={true}>
-                        <div className="RowExample__Left">
-                            Left
-                        </div>
-                    </Block>
-                </Column>
-            </Row>
-        </div>
-        <div className="TableExample2">
-            {/*<Table
-                rowHeight={30}
-                rowsCount={1}
-                columnWidths={{
-                    field1: 100,
-                    field2: 300,
-                    field3: 100,
-                    field4: 150
-                }}
-                columns={['field1', 'field4', 'field3', 'field2']}
-                customRowsHeights={[
-                    {
-                        index: 0,
-                        height: 500
-                    }
-                ]}
-            >
-                <TableHeader key="header" />
-                <TableMyRow />
-                <TableFooter key="footer" />
-            </Table>*/}
-        </div>
         <div className="TableExample">
             <Table
                 rowHeight={30}
                 rowsCount={100000}
                 columnWidths={{
-                    field1: 100,
-                    field2: 300,
-                    field3: 100,
-                    field4: 150
+                    field1: 50,
+                    field2: 150,
+                    field3: 50,
+                    field4: 85,
+                    field5: 100,
+                    field6: 150,
+                    field7: 50,
+                    field8: 50,
+                    field9: 85,
+                    field10: 50,
+                    field11: 85,
+                    field12: 50,
+                    field13: 85,
+                    field14: 50,
+                    field15: 100,
+                    field16: 100,
+                    field17: 100,
+                    field18: 100,
+                    field19: 100
                 }}
-                columns={['field1', 'field4', 'field3', 'field2']}
-                customRowsHeights={[
-                    {
-                        index: 1000,
-                        height: 500
-                    },
-                    {
-                        index: 1002,
-                        height: 500
-                    }
-                    ,
-                    {
-                        index: 1121,
-                        height: 501
-                    }
-                    ,
-                    {
-                        index: 100,
-                        height: 50
-                    }
-                    ,
-                    {
-                        index: 74,
-                        height: 1080
-                    }
-                    ,
-                    {
-                        index: 80,
-                        height: 260
-                    }
-                    ,
-                    {
-                        index: 99,
-                        height: 150
-                    }
+                columns={[
+                    'field1', 'field2', 'field3', 'field4', 'field5', 'field6',
+                    'field7', 'field8', 'field9', 'field10', 'field11',
+                    'field12', 'field13', 'field14', 'field15',
+                    'field16', 'field17', 'field18', 'field19'
                 ]}
-            >
-                <TableHeader key="header" />
-                <TableMyRow />
-                <TableFooter key="footer" />
-            </Table>
-        </div>
-        <div className="InfiniteScrollExample">
-            {/*<InfiniteScrollView
-                rowHeight={30}
-                rowsCount={1000}
-                parentWithScrollGetter={() => document.querySelector('.App')}
-                customRowsHeights={[
-                    {
-                        index: 10,
-                        height: 100
-                    },
-                    {
-                        index: 1,
-                        height: 50
-                    },
-                    {
-                        index: 100,
-                        height: 150
-                    }
-                ]}
-            >  
-                <Header key="header" />
-                <MyRow />
-                <Footer key="footer" />
-            </InfiniteScrollView>*/}
+
+                renderRow={(props) => <TableRow {...props} />}
+            />
         </div>
     </div>,
     document.querySelector('#app')

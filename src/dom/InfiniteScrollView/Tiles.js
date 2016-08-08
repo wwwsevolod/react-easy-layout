@@ -195,3 +195,90 @@ export function selectRowsAndOffsetFromVisibleTiles(
         offsetTop: offsetTop - (offsetTopDiff ? (tileHeight - offsetTopDiff) : 0)
     };
 }
+
+export function selectVisibleTilesAndOffset(
+    tiles,
+    rowsCount,
+    normalizedOffsetTop,
+    tileHeight,
+    availHeight,
+    defaultRowHeight,
+    customRowsHeightsHashMap,
+    tileSize
+) {
+    if (!tiles.length) {
+        return {
+            logicTiles: [],
+            offsetTop: 0
+        };
+    }
+
+    const needToAddOneMore = !!(availHeight % tileHeight);
+
+    const tileIndexFrom = Math.max(
+        0,
+        Math.min(
+            tiles.length - 1,
+            Math.floor(normalizedOffsetTop / tileHeight)
+        )
+    );
+
+    let tileFrom = tiles[tileIndexFrom];
+
+    const tileIndexTo = Math.min(
+        tiles.length - 1,
+        tileIndexFrom + Math.floor(availHeight / tileHeight) + (needToAddOneMore ? 1 : 0)
+    );
+
+    const tileTo = tiles[tileIndexTo];
+
+    const offsetTop = (tileFrom.linkedHead !== -1 ? tileFrom.linkedHead + 1 : tileIndexFrom) * tileHeight;
+    
+    const offsetTopDiff = tileFrom.offsetTopDiff;
+
+    let finalOffsetTop = offsetTop - (offsetTopDiff ? (tileHeight - offsetTopDiff) : 0);
+
+    let indexFrom = tileFrom.linkedHead !== -1 ?
+        tiles[tileFrom.linkedHead].indexTo - 1 : tileFrom.indexFrom;
+
+    let needToTile = indexFrom % tileSize;
+
+    while (needToTile) {
+        indexFrom--;
+        needToTile--;
+
+        if (indexFrom in customRowsHeightsHashMap) {
+            finalOffsetTop -= customRowsHeightsHashMap[indexFrom];
+        } else {
+            finalOffsetTop -= defaultRowHeight;
+        }
+    }
+
+    let indexTo = tileTo.indexTo;
+
+    while(indexTo % tileSize && indexTo < rowsCount) {
+        indexTo++;
+    }
+
+    const logicTiles = [];
+
+    while (indexFrom < indexTo) {
+        if (indexFrom + tileSize < indexTo) {
+            logicTiles.push({
+                indexFrom,
+                indexTo: indexFrom + tileSize
+            });
+        } else {
+            logicTiles.push({
+                indexFrom,
+                indexTo
+            });
+        }
+        indexFrom += tileSize;
+    }
+
+    return {
+        logicTiles,
+        offsetTop: finalOffsetTop
+    };
+}
