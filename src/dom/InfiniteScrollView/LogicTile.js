@@ -48,7 +48,7 @@ export default class LogicTile extends Component {
             }));
         }
 
-        return <div>
+        return <div data-wtf={this.props.wtfKey}>
             {rows}
         </div>;
     }

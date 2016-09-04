@@ -6,7 +6,8 @@ import {
     getTiles,
     getHeightFromTiles,
     selectRowsAndOffsetFromVisibleTiles,
-    selectVisibleTilesAndOffset
+    selectVisibleTilesAndOffset,
+    appendNewTilesIfPossible
 } from './Tiles';
 import LogicTile from './LogicTile';
 
@@ -75,6 +76,8 @@ export default class InfiniteScrollView extends Component {
 
         tileSize: PropTypes.number.isRequired,
 
+        timeToInvalidateLogicTilesCache: PropTypes.number.isRequired,
+
         shouldUpdateRow: PropTypes.func,
         renderHeader: PropTypes.func,
         renderRow: PropTypes.func,
@@ -89,6 +92,8 @@ export default class InfiniteScrollView extends Component {
         viewportStartGetter: defaultViewportStartGetter,
         maxViewportGetter: defaultMaxViewportGetter,
 
+        timeToInvalidateLogicTilesCache: 5000,
+
         tileSize: 20,
 
         getPrimaryKeyValue(index) {
@@ -97,9 +102,12 @@ export default class InfiniteScrollView extends Component {
     };
 
     state = {
-        logicTiles: [],
+        logicTilesDebounced: [],
+        currentLogicTiles: [],
 
         offsetTop: 0,
+        currentOffsetTop: 0,
+
         toIndex: 0,
         fromIndex: 0,
 
@@ -108,7 +116,10 @@ export default class InfiniteScrollView extends Component {
         availHeight: 0,
         viewportStart: 0,
 
-        totalHeightStyle: {height: '0px'},
+        totalHeightStyle: {
+            height: '0px'
+        },
+
         additionalHeightFakeTop: 0,
         additionalHeightFakeBottom: 0
     };
@@ -201,7 +212,9 @@ export default class InfiniteScrollView extends Component {
 
         if (!logicTilesAndOffset.logicTiles.length) {
             return {
-                logicTiles: [],
+                currentLogicTiles: [],
+                logicTilesDebounced: [],
+                currentOffsetTop: 0,
                 fromIndex: 0,
                 toIndex: 0,
                 height: 0,
@@ -209,12 +222,21 @@ export default class InfiniteScrollView extends Component {
             };
         }
 
+        const {prevTiles, offsetTop} = appendNewTilesIfPossible(
+            this.state.logicTilesDebounced,
+            logicTilesAndOffset.logicTiles,
+            this.state.offsetTop,
+            logicTilesAndOffset.offsetTop
+        );
+
         return {
             fromIndex: logicTilesAndOffset.logicTiles[0].indexFrom,
             toIndex: logicTilesAndOffset.logicTiles[logicTilesAndOffset.logicTiles.length - 1].indexTo,
-            logicTiles: logicTilesAndOffset.logicTiles,
+            currentLogicTiles: logicTilesAndOffset.logicTiles,
+            logicTilesDebounced: prevTiles,
             height,
-            offsetTop: logicTilesAndOffset.offsetTop
+            currentOffsetTop: logicTilesAndOffset.offsetTop,
+            offsetTop
         };
     }
 
@@ -240,7 +262,15 @@ export default class InfiniteScrollView extends Component {
         newState.availHeight = availHeight;
         newState.viewportStart = viewportStart;
 
-        const {fromIndex, toIndex, height, offsetTop, logicTiles} = this.getViewState(
+        const {
+            fromIndex,
+            toIndex,
+            height,
+            offsetTop,
+            currentLogicTiles,
+            currentOffsetTop,
+            logicTilesDebounced
+        } = this.getViewState(
             props,
             scrollTop,
             viewportStart,
@@ -253,7 +283,9 @@ export default class InfiniteScrollView extends Component {
             };
         }
 
-        newState.logicTiles = logicTiles;
+        newState.currentLogicTiles = currentLogicTiles;
+        newState.currentOffsetTop = currentOffsetTop;
+        newState.logicTilesDebounced = logicTilesDebounced;
         newState.fromIndex = fromIndex;
         newState.toIndex = toIndex;
         newState.offsetTop = offsetTop;
@@ -268,6 +300,14 @@ export default class InfiniteScrollView extends Component {
         } else {
             this.setState(newState, props.stateCallback);
         }
+
+        clearTimeout(this.timerOfDebouncedTilesInvalation);
+        this.timerOfDebouncedTilesInvalation = setTimeout(() => {
+            this.setState({
+                logicTilesDebounced: this.state.currentLogicTiles,
+                offsetTop: this.state.currentOffsetTop
+            });
+        }, this.props.timeToInvalidateLogicTilesCache);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -345,9 +385,10 @@ export default class InfiniteScrollView extends Component {
         const tiles = [];
 
         if (this.props.renderRow) {
-            for (let tile of this.state.logicTiles) {
+            for (let tile of this.state.logicTilesDebounced) {
                 tiles.push(<LogicTile
                     key={tile.indexFrom}
+                    wtfKey={tile.indexFrom}
 
                     fromIndex={tile.indexFrom}
                     toIndex={tile.indexTo}

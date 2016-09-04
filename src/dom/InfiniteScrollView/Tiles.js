@@ -282,3 +282,93 @@ export function selectVisibleTilesAndOffset(
         offsetTop: finalOffsetTop
     };
 }
+
+export function appendNewTilesIfPossible(prevTiles, tiles, offsetTopPrev, offsetTop) {
+    if (!tiles.length) {
+        return {
+            offsetTop: 0,
+            prevTiles: []
+        };
+    }
+
+    const defaultReturnValue = {
+        offsetTop,
+        prevTiles: tiles
+    };
+
+    if (!prevTiles.length) {
+        return defaultReturnValue;
+    }
+    
+    const firstPrevTile = prevTiles[0];
+    const lastPrevTile = prevTiles[prevTiles.length - 1];
+
+    const firstCurrentTile = tiles[0];
+    const lastCurrentTile = tiles[tiles.length - 1];
+
+    if (firstPrevTile.indexFrom === lastCurrentTile.indexTo) {
+        return {
+            offsetTop,
+            prevTiles: [...tiles, ...prevTiles]
+        };
+    }
+
+    if (lastPrevTile.indexTo === firstCurrentTile.indexFrom) {
+        return {
+            offsetTop,
+            prevTiles: [...prevTiles, ...tiles]
+        };
+    }
+
+    if (firstPrevTile.indexFrom >= firstCurrentTile.indexFrom && lastPrevTile.indexTo <= lastCurrentTile.indexTo) {
+        return {
+            offsetTop,
+            prevTiles: tiles
+        };
+    }
+
+    if (firstPrevTile.indexFrom <= firstCurrentTile.indexFrom && lastPrevTile.indexTo >= lastCurrentTile.indexTo) {
+        return {
+            offsetTop: offsetTopPrev,
+            prevTiles: prevTiles
+        };
+    }
+
+    if (firstCurrentTile.indexFrom > lastPrevTile.indexTo) {
+        return defaultReturnValue;
+    }
+
+    if (lastCurrentTile.indexTo < firstPrevTile.indexFrom) {
+        return defaultReturnValue;
+    }
+
+    if (firstCurrentTile.indexFrom < firstPrevTile.indexFrom) {
+        for (let i = 0; i < prevTiles.length; i++) {
+            const index = i;
+            if (prevTiles[index].indexFrom === lastCurrentTile.indexTo) {
+                return {
+                    offsetTop: offsetTop,
+                    prevTiles: [
+                        ...tiles,
+                        ...prevTiles.slice(index, prevTiles.length)
+                    ]
+                };
+            }
+        }
+    } else {
+        for (let i = 0; i < prevTiles.length; i++) {
+            const index = prevTiles.length - i - 1;
+            if (prevTiles[index].indexTo === firstCurrentTile.indexFrom) {
+                return {
+                    offsetTop: offsetTopPrev,
+                    prevTiles: [
+                        ...prevTiles.slice(0, index + 1),
+                        ...tiles
+                    ]
+                };
+            }
+        }
+    }
+
+    return defaultReturnValue;
+}
