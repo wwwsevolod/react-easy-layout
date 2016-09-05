@@ -295,19 +295,21 @@ export default class InfiniteScrollView extends Component {
             props.beforeStateChangeCallback();
         }
 
-        if (!props.stateCallback) {
-            this.setState(newState);
-        } else {
-            this.setState(newState, props.stateCallback);
-        }
-
         clearTimeout(this.timerOfDebouncedTilesInvalation);
-        this.timerOfDebouncedTilesInvalation = setTimeout(() => {
-            this.setState({
-                logicTilesDebounced: this.state.currentLogicTiles,
-                offsetTop: this.state.currentOffsetTop
-            });
-        }, this.props.timeToInvalidateLogicTilesCache);
+
+        this.setState(newState, () => {
+            clearTimeout(this.timerOfDebouncedTilesInvalation);
+            this.timerOfDebouncedTilesInvalation = setTimeout(() => {
+                this.setState({
+                    logicTilesDebounced: this.state.currentLogicTiles,
+                    offsetTop: this.state.currentOffsetTop
+                });
+            }, this.props.timeToInvalidateLogicTilesCache);
+
+            if (props.stateCallback) {
+                props.stateCallback();
+            }
+        });
     }
 
     componentWillReceiveProps(nextProps) {
