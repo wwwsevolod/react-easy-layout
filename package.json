@@ -37,7 +37,6 @@
     "url": "https://github.com/wwwsevolod/react-easy-layout/issues"
   },
   "homepage": "https://github.com/wwwsevolod/react-easy-layout#readme",
-  "peerDependencies": {},
   "devDependencies": {
     "autoprefixer": "^6.3.1",
     "babel": "^6.3.26",
@@ -62,6 +61,7 @@
     "jsdom": "^8.3.0",
     "mocha": "^2.3.4",
     "postcss-cli": "^2.4.0",
+    "prop-types": "^15.8.1",
     "react": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
