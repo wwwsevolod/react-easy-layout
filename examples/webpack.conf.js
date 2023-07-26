@@ -2,6 +2,7 @@
 
 var webpack = require('webpack');
 var path = require('path');
+var PORT = 8081
 
 module.exports = {
     devtool: 'source-map',
@@ -15,7 +16,7 @@ module.exports = {
 
     output: {
         path: path.resolve(__dirname, 'build'),
-        publicPath: 'http://localhost:8080/build/',
+        publicPath: `http://localhost:${PORT}/build/`,
         filename: '[name].js'
     },
 
@@ -51,6 +52,7 @@ module.exports = {
     ],
 
     devServer: {
-           contentBase: './'
+           contentBase: './',
+           port: PORT
     }
 };

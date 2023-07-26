@@ -1,6 +1,6 @@
 {
   "name": "react-easy-layout-fork",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Advanced react layout library that easy to use",
   "main": "lib/index.js",
   "scripts": {
